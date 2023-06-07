@@ -1,0 +1,147 @@
+.wrapper {
+    margin-top: 50px;
+
+    max-width: 90%;
+    font-family: 'Saira Semi Condensed', sans-serif;
+
+    --primary: blue;
+    --dark: #000;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    align-items: center;
+    margin-left: auto;
+}
+
+.left {
+    margin-top: -50px;
+}
+.clock {
+    width: 370px;
+    padding: 40px;
+    margin: 100px auto 60px;
+    position: relative;
+    background-color: #f3f3f3;
+    color: #272e38;
+
+    &::after {
+        content: '';
+        position: absolute;
+        width: 400px;
+        min-height: 20px;
+        border-radius: 100%;
+        left: 50%;
+        margin-left: -200px;
+        bottom: 2px;
+        z-index: -1;
+    }
+}
+
+.inner-clock {
+    text-align: center;
+    // padding: 40px 20px 20px;
+    border-radius: 6px;
+    position: relative;
+    min-height: 54px;
+    background-color: #dddddd;
+
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08) inset, 0 1px 1px #fafafa;
+}
+
+.week-day {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    padding-top: 16px;
+
+    span {
+        opacity: 0.3;
+    }
+}
+
+.week-day span.active {
+    opacity: 0.8;
+}
+
+.alarm {
+    font-size: 6.6rem;
+}
+
+.check-in {
+    align-items: center;
+    display: flex;
+    margin: 0 auto;
+
+    width: 280px;
+}
+
+.form-input {
+    position: relative;
+    width: 100%;
+
+    border-radius: 10px;
+
+    &::after {
+        content: '';
+        position: absolute;
+        width: 280px;
+        height: 2px;
+        background-color: #aaa;
+        bottom: 0;
+        right: 0;
+    }
+}
+
+.form-input .input {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    border: 0;
+    font-family: inherit;
+    padding: 12px 12px 0 12px;
+    height: 48px;
+    font-size: 16px;
+    font-weight: 400;
+
+    color: var(--dark);
+    transition: all 0.15s ease;
+}
+.inp {
+}
+
+.label {
+    position: absolute;
+
+    top: 12px;
+    left: 12px;
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+    transform-origin: 0 0;
+    transform: translate3d(0, 0, 0);
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+input:not(:placeholder-shown) + .label {
+    color: #dbe4e6;
+    transform: translate3d(0, -10px, 0) scale(0.75);
+}
+
+.right img {
+    display: inline-flex;
+    width: 584px;
+    height: 619px;
+}
+
+.send {
+    width: 30px;
+    height: 30px;
+    background-color: #000;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: -50px;
+}
