@@ -7,6 +7,7 @@ import axios from '~/api/axios';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -15,8 +16,11 @@ function CheckIn() {
     let time = new Date().toLocaleTimeString();
 
     const [ctime, setCtime] = useState(time);
-
     const [empId, setEmpId] = useState('');
+
+    const navigate = useNavigate();
+
+    const [success, setSucces] = useState(false);
 
     const empIdRef = useRef();
 
@@ -27,23 +31,73 @@ function CheckIn() {
 
     setInterval(updateTime, 1000);
 
+    const notifyError = () => {
+        toast.error(`Emp${empId} checkin faild!`, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
+    };
+
+    const notifySuccess = () => {
+        toast.success(`Emp${empId} checkin success!`, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
+    };
+
+    const notifyWarning = () => {
+        toast.warn('🦄 Please check in first!', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
+    };
+
     const handleSubmit = async () => {
         try {
             const response = await axios.post(`timesheet?empId=${empId}`);
             console.log(response.data);
 
             if (typeof response.data === 'undefined') {
-                alert(`EMP` + empId + ' check in failed!');
+                setSucces(false);
+                notifyError();
             } else {
-                alert(`EMP` + empId + ' check in successfully!');
+                setSucces(true);
+                notifySuccess();
             }
         } catch (error) {
             if (error.response?.status === 500 || error.response?.status === 400) {
                 console.log('emp id error!');
-
-                alert(`EMP` + empId + ' check in failed!');
+                setSucces(true);
+                notifyError();
             }
         }
+    };
+
+    const handleLogin = () => {
+        if (success === false) {
+            notifyWarning();
+        } else {
+            navigate(`home/${empId}`);
+        }
+        console.log('handle login');
     };
 
     return (
@@ -87,12 +141,32 @@ function CheckIn() {
                             </div>
                         </div>
                     </div>
+
+                    <div className={cx('separate')}>
+                        <span>OR</span>
+                    </div>
+                    <div className={cx('login')}>
+                        <button onClick={handleLogin}>Log in</button>
+                    </div>
                 </div>
 
                 <div className={cx('right')}>
                     <img src={images.house} alt="" />
                 </div>
             </div>
+
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            ></ToastContainer>
         </>
     );
 }

@@ -193,3 +193,52 @@ input:not(:placeholder-shown) + .label {
     background-color: #fb6238;
     border-radius: 50%;
 }
+
+.separate {
+    margin-top: 20px;
+    width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.separate::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #ccc;
+    z-index: -1;
+}
+
+.separate span {
+    background-color: #dbe4e6;
+    padding: 0 6px;
+}
+
+.login {
+    width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    background: #0166ff;
+    border-radius: 24px;
+}
+
+.login button {
+    width: 100%;
+    height: 48px;
+    color: #fff;
+    background-color: transparent;
+    font-weight: 600;
+    font-size: 1.6rem;
+    line-height: 1;
+    font-family: 'Roboto', sans-serif;
+    cursor: pointer;
+}
