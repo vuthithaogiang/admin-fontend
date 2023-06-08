@@ -85,20 +85,22 @@ function CheckIn() {
         } catch (error) {
             if (error.response?.status === 500 || error.response?.status === 400) {
                 console.log('emp id error!');
-                setSucces(true);
+                setSucces(false);
                 notifyError();
             }
         }
     };
 
     const handleLogin = () => {
-        if (success === false) {
+        if (success === false || empId === '') {
             notifyWarning();
         } else {
             navigate(`home/${empId}`);
         }
         console.log('handle login');
     };
+
+    const handleLoginAdmin = () => {};
 
     return (
         <>
@@ -147,6 +149,10 @@ function CheckIn() {
                     </div>
                     <div className={cx('login')}>
                         <button onClick={handleLogin}>Log in</button>
+                    </div>
+
+                    <div className={cx('login', 'admin')}>
+                        <button onClick={handleLoginAdmin}>Go to Dashboard if You are admin</button>
                     </div>
                 </div>
 

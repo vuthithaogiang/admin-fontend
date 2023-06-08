@@ -236,9 +236,17 @@ input:not(:placeholder-shown) + .label {
     height: 48px;
     color: #fff;
     background-color: transparent;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 1.6rem;
     line-height: 1;
     font-family: 'Roboto', sans-serif;
     cursor: pointer;
+}
+
+.login.admin {
+    background-color: rgba(50, 90, 255, 0.06);
+}
+
+.login.admin button {
+    color: #0166ff;
 }

@@ -1,0 +1,23 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+.sidebar,
+.content {
+    padding-top: 25px;
+    padding-left: 10px;
+}
+
+.sidebar {
+    max-height: 100vh;
+    overflow-y: scroll;
+    width: 320px;
+    background-color: #f2fbfd;
+}
+
+.content {
+    background-color: #fff;
+    min-height: 100vh;
+    padding-right: 70px;
+}
