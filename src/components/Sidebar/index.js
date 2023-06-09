@@ -79,12 +79,12 @@ function Sidebar() {
                 {
                     itemContent: 'History Furloughs',
                     icon: <FontAwesomeIcon icon={faFile} />,
-                    path: '',
+                    path: `/view/${params.empId}/furlough`,
                 },
                 {
                     itemContent: 'Add new',
                     icon: <FontAwesomeIcon icon={faClipboard} />,
-                    path: '',
+                    path: `/view/${params.empId}/furloughAdd`,
                 },
             ],
         },

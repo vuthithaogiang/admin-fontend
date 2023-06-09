@@ -266,16 +266,7 @@ function Dashboard() {
                                         <FontAwesomeIcon className={cx('icon-up')} icon={faSortUp} />
                                     )}
                                 </span>
-                                <span className={cx('item-sort')} onClick={() => sorting('status')}>
-                                    Status
-                                    {type !== 'status' && <FontAwesomeIcon icon={faSort} />}
-                                    {type === 'status' && filter === 'ASC' && (
-                                        <FontAwesomeIcon className={cx('icon-down')} icon={faSortDown} />
-                                    )}
-                                    {type === 'status' && filter === 'DESC' && (
-                                        <FontAwesomeIcon className={cx('icon-up')} icon={faSortUp} />
-                                    )}
-                                </span>
+                                <span className={cx('item-sort')}>Status</span>
                                 <span className={cx('item-sort')}>Position</span>
                             </div>
 

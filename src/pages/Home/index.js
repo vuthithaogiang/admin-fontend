@@ -9,6 +9,7 @@ import Header from '~/components/Header';
 import Dashboard from '../Dashboard';
 import TimesheetDetails from '../TimesheetDetails';
 import DaysOff from '../DaysOff';
+import AddFurlough from '../AddFurlough';
 
 const cx = classNames.bind(styles);
 
@@ -57,6 +58,8 @@ function Home() {
                         {params.children === 'timesheetDetails' && <TimesheetDetails />}
 
                         {params.children === 'daysOff' && <DaysOff />}
+
+                        {params.children === 'furloughAdd' && <AddFurlough />}
                     </div>
                 </>
             )}

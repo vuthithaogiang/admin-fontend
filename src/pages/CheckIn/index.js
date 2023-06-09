@@ -95,7 +95,7 @@ function CheckIn() {
         if (success === false || empId === '') {
             notifyWarning();
         } else {
-            navigate(`view/${empId}`);
+            navigate(`view/${empId}/dashboard`);
         }
         console.log('handle login');
     };

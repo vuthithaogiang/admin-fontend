@@ -9,6 +9,8 @@ const images = {
     group: require('~/assets/images/group.svg').default,
     math: require('~/assets/images/math.svg').default,
     decoration: require('~/assets/images/decoration.svg').default,
+    decoration1: require('~/assets/images/decoration1.svg').default,
+    decoration2: require('~/assets/images/decoration2.svg').default,
     icon1: require('~/assets/images/icon1.svg').default,
     icon2: require('~/assets/images/icon2.svg').default,
     icon3: require('~/assets/images/icon3.svg').default,

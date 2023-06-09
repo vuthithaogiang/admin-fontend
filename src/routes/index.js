@@ -3,6 +3,7 @@ import Home from '~/pages/Home';
 
 const publicRoutes = [
     { path: '/', component: CheckIn },
+
     {
         path: '/view/:empId/:children',
         component: Home,
