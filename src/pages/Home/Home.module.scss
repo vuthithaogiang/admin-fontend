@@ -1,12 +1,10 @@
 .wrapper {
-    display: grid;
-    grid-template-columns: auto 1fr;
 }
 
 .sidebar,
 .content {
     padding-top: 25px;
-    padding-left: 10px;
+    padding-left: 25px;
 }
 
 .sidebar {
@@ -14,10 +12,12 @@
     overflow-y: scroll;
     width: 320px;
     background-color: #f2fbfd;
+    position: fixed;
 }
 
 .content {
     background-color: #fff;
     min-height: 100vh;
-    padding-right: 70px;
+    padding-right: 50px;
+    margin-left: 320px;
 }
