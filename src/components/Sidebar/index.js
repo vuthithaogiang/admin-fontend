@@ -6,33 +6,38 @@ import { faBars, faCode, faCouch, faGear, faPencil } from '@fortawesome/free-sol
 import { faClipboard, faClock, faComment, faFile, faIdBadge } from '@fortawesome/free-regular-svg-icons';
 import { faCodepen, faTeamspeak } from '@fortawesome/free-brands-svg-icons';
 import Menu from '../Menu';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const cx = classNames.bind(styles);
 
 function Sidebar() {
+    let params = useParams();
     const SIDEBARMENU = [
         {
             type: 'Home',
+            path: `/view/${params.empId}/dashboard`,
             children: [
                 {
                     itemContent: 'Dashboard',
                     icon: <FontAwesomeIcon icon={faBars} />,
-                    path: '/dashboard',
+                    path: `/view/${params.empId}/dashboard`,
                 },
                 {
                     itemContent: 'Timesheet Details',
                     icon: <FontAwesomeIcon icon={faClock} />,
-                    path: '/timesheetDetails',
+                    path: `/view/${params.empId}/timesheetDetails`,
                 },
                 {
                     itemContent: 'Day off',
                     icon: <FontAwesomeIcon icon={faCouch} />,
-                    path: '/daysOff',
+                    path: `/view/${params.empId}/daysOff`,
                 },
             ],
         },
         {
             type: 'Team',
+            path: `/view/${params.empId}/team`,
             children: [
                 {
                     itemContent: 'UI/UX Design',
@@ -58,6 +63,7 @@ function Sidebar() {
         },
         {
             type: 'Profile',
+            path: `/view/${params.empId}/profile`,
             children: [
                 {
                     itemContent: 'View Profile',
@@ -68,6 +74,7 @@ function Sidebar() {
         },
         {
             type: 'Furlough',
+            path: `/view/${params.empId}/furlough`,
             children: [
                 {
                     itemContent: 'History Furloughs',
@@ -83,6 +90,7 @@ function Sidebar() {
         },
         {
             type: 'Help',
+            path: `/view/${params.empId}/help`,
             children: [
                 {
                     itemContent: 'Setting',
@@ -98,6 +106,8 @@ function Sidebar() {
         },
     ];
 
+    useEffect(() => {}, []);
+
     const handleChangeMenu = () => {
         console.log('change menu');
     };
@@ -109,7 +119,13 @@ function Sidebar() {
             </div>
 
             {SIDEBARMENU.map((menu) => (
-                <Menu type={menu.type} key={menu.type} items={menu.children} onChange={handleChangeMenu}></Menu>
+                <Menu
+                    type={menu.type}
+                    key={menu.type}
+                    to={menu.path}
+                    items={menu.children}
+                    onChange={handleChangeMenu}
+                ></Menu>
             ))}
         </div>
     );

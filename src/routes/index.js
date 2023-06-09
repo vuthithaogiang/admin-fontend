@@ -3,8 +3,10 @@ import Home from '~/pages/Home';
 
 const publicRoutes = [
     { path: '/', component: CheckIn },
-
-    { path: '/home/:empId', component: Home },
+    {
+        path: '/view/:empId/:children',
+        component: Home,
+    },
 ];
 
 const privteRoutes = [];

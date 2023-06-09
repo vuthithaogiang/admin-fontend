@@ -1,13 +1,14 @@
 import classNames from 'classnames/bind';
 
 import styles from './Home.module.scss';
-import images from '~/assets/images';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from '~/api/axios';
 import Sidebar from '~/components/Sidebar';
 import Header from '~/components/Header';
-import HomeRouter from '~/routes/HomeRouter';
+import Dashboard from '../Dashboard';
+import TimesheetDetails from '../TimesheetDetails';
+import DaysOff from '../DaysOff';
 
 const cx = classNames.bind(styles);
 
@@ -50,7 +51,12 @@ function Home() {
 
                     <div className={cx('content')}>
                         <Header avatar={employeeInfo[0].avatar} />
-                        <HomeRouter />
+
+                        {params.children === 'dashboard' && <Dashboard />}
+
+                        {params.children === 'timesheetDetails' && <TimesheetDetails />}
+
+                        {params.children === 'daysOff' && <DaysOff />}
                     </div>
                 </>
             )}

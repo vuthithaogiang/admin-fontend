@@ -36,7 +36,7 @@
     display: flex;
     gap: 10px;
     align-items: center;
-    padding: 4px 0;
+    padding: 8px 0;
 
     &:hover {
         color: #0688ff;
@@ -44,11 +44,11 @@
 }
 
 .menu-item + .menu-item {
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 .menu-item .name {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
 }
 
 .menu-item.active {
