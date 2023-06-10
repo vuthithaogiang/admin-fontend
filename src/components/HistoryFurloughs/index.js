@@ -17,7 +17,7 @@ function HistoryFurloughs() {
 
     const fetchDetails = async () => {
         try {
-            const response = await axios.get(`/furlough/getAllByEmpId/${params.empId}`);
+            const response = await axios.get(`/employeeOff/getAllByEmpId/${params.empId}`);
 
             console.log(response.data);
 
@@ -52,7 +52,7 @@ function HistoryFurloughs() {
                         {/* 2 */}
                         <div className={cx('item-sort')}>
                             <FontAwesomeIcon icon={faClock} />
-                            <span>Update At</span>
+                            <span>Created At</span>
                         </div>
                         {/* 3 */}
                         <div className={cx('item-sort')}>
@@ -74,13 +74,13 @@ function HistoryFurloughs() {
                                 {/* 1 */}
                                 <div className={cx('item')} key={item.furloughId}>
                                     <span className={cx('avatar')}>
-                                        <img src={item.employee.avatar} alt="avatar" />
+                                        <img src={item.avatar} alt="avatar" />
                                     </span>
                                 </div>
 
                                 {/* 2 */}
                                 <div className={cx('item')}>
-                                    <span>{item.updateAt}</span>
+                                    <span>{item.createAt}</span>
                                 </div>
 
                                 <>

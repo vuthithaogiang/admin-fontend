@@ -11,11 +11,108 @@ import TimesheetDetails from '../TimesheetDetails';
 import DaysOff from '../DaysOff';
 import AddFurlough from '../AddFurlough';
 import HistoryFurloughs from '~/components/HistoryFurloughs';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faCode, faCouch, faGear, faPencil } from '@fortawesome/free-solid-svg-icons';
+import { faClipboard, faClock, faComment, faFile, faIdBadge } from '@fortawesome/free-regular-svg-icons';
+import { faCodepen, faTeamspeak } from '@fortawesome/free-brands-svg-icons';
 
 const cx = classNames.bind(styles);
 
 function Home() {
     let params = useParams();
+
+    const SIDEBARMENU = [
+        {
+            type: 'Home',
+            path: `/view/${params.empId}/dashboard`,
+            children: [
+                {
+                    itemContent: 'Dashboard',
+                    icon: <FontAwesomeIcon icon={faBars} />,
+                    path: `/view/${params.empId}/dashboard`,
+                },
+                {
+                    itemContent: 'Timesheet Details',
+                    icon: <FontAwesomeIcon icon={faClock} />,
+                    path: `/view/${params.empId}/timesheetDetails`,
+                },
+                {
+                    itemContent: 'Day off',
+                    icon: <FontAwesomeIcon icon={faCouch} />,
+                    path: `/view/${params.empId}/daysOff`,
+                },
+            ],
+        },
+        {
+            type: 'Team',
+            path: `/view/${params.empId}/team`,
+            children: [
+                {
+                    itemContent: 'UI/UX Design',
+                    icon: <FontAwesomeIcon icon={faPencil} />,
+                    path: '',
+                },
+                {
+                    itemContent: 'Fontend',
+                    icon: <FontAwesomeIcon icon={faCodepen} />,
+                    path: '',
+                },
+                {
+                    itemContent: 'BackEnd',
+                    icon: <FontAwesomeIcon icon={faCode} />,
+                    path: '',
+                },
+                {
+                    itemContent: 'Telesale',
+                    icon: <FontAwesomeIcon icon={faTeamspeak} />,
+                    path: '',
+                },
+            ],
+        },
+        {
+            type: 'Profile',
+            path: `/view/${params.empId}/profile`,
+            children: [
+                {
+                    itemContent: 'View Profile',
+                    icon: <FontAwesomeIcon icon={faIdBadge} />,
+                    path: '',
+                },
+            ],
+        },
+        {
+            type: 'Furlough',
+            path: `/view/${params.empId}/furlough`,
+            children: [
+                {
+                    itemContent: 'History Furloughs',
+                    icon: <FontAwesomeIcon icon={faFile} />,
+                    path: `/view/${params.empId}/furlough`,
+                },
+                {
+                    itemContent: 'Add new',
+                    icon: <FontAwesomeIcon icon={faClipboard} />,
+                    path: `/view/${params.empId}/furloughAdd`,
+                },
+            ],
+        },
+        {
+            type: 'Help',
+            path: `/view/${params.empId}/help`,
+            children: [
+                {
+                    itemContent: 'Setting',
+                    icon: <FontAwesomeIcon icon={faGear} />,
+                    path: '',
+                },
+                {
+                    itemContent: 'Send Feedback',
+                    icon: <FontAwesomeIcon icon={faComment} />,
+                    path: '',
+                },
+            ],
+        },
+    ];
 
     const [employeeInfo, setEmployeeInfo] = useState([]);
 
@@ -48,7 +145,7 @@ function Home() {
             {isLoading === false && (
                 <>
                     <div className={cx('sidebar')}>
-                        <Sidebar />
+                        <Sidebar listMenu={SIDEBARMENU} />
                     </div>
 
                     <div className={cx('content')}>

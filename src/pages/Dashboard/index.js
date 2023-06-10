@@ -49,6 +49,8 @@ function Dashboard() {
     const [filter, setFilter] = useState('DESC');
     const [type, setType] = useState('');
 
+    const [hoursTotal, setHoursTotal] = useState(0);
+
     const params = useParams();
 
     const fetchDetails = async () => {
@@ -63,6 +65,7 @@ function Dashboard() {
                 setEmployeeInfo(response.data);
 
                 const resultStats = [];
+                let totalHs = 0;
 
                 for (var i = 0; i < response.data.length; i++) {
                     var object = {
@@ -71,10 +74,12 @@ function Dashboard() {
                     };
 
                     resultStats.push(object);
+                    totalHs += response.data[i].totalWork;
                 }
 
                 console.log(resultStats);
                 setData(resultStats);
+                setHoursTotal(totalHs);
                 setIsLoading(false);
             }
         } catch (error) {
@@ -145,7 +150,7 @@ function Dashboard() {
                                 <div className={cx('content')}>
                                     <span className={cx('title')}>Minus Late</span>
                                     <span className={cx('number')}>
-                                        100
+                                        {employeeInfo[0].minusLate}
                                         <strong>today</strong>
                                     </span>
                                 </div>
@@ -159,7 +164,7 @@ function Dashboard() {
                                 <div className={cx('content')}>
                                     <span className={cx('title')}>Fisnished</span>
                                     <span className={cx('number')}>
-                                        30h
+                                        {hoursTotal}
                                         <strong>this week</strong>
                                     </span>
                                 </div>

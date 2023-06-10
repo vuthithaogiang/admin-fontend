@@ -100,7 +100,9 @@ function CheckIn() {
         console.log('handle login');
     };
 
-    const handleLoginAdmin = () => {};
+    const handleLoginAdmin = () => {
+        navigate('/admin/dashboard');
+    };
 
     return (
         <>
