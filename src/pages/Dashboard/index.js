@@ -12,6 +12,38 @@ import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons'
 const cx = classNames.bind(styles);
 
 function Dashboard() {
+    const dataDefault = [
+        {
+            name: 'MON',
+            hours: null,
+        },
+        {
+            name: 'TUE',
+            hours: 0,
+        },
+        {
+            name: 'WED',
+            hours: 0,
+        },
+        {
+            name: 'THUR',
+            hours: 0,
+        },
+        {
+            name: 'FRI',
+            hours: 0,
+        },
+        {
+            name: 'SAT',
+            hours: 0,
+        },
+        {
+            name: 'SUN',
+            hours: 0,
+        },
+    ];
+
+    const [data, setData] = useState(dataDefault);
     const [isLoading, setIsLoading] = useState(true);
     const [employeeInfo, setEmployeeInfo] = useState([]);
     const [filter, setFilter] = useState('DESC');
@@ -29,6 +61,20 @@ function Dashboard() {
                 console.log('undefined!!');
             } else {
                 setEmployeeInfo(response.data);
+
+                const resultStats = [];
+
+                for (var i = 0; i < response.data.length; i++) {
+                    var object = {
+                        name: response.data[i].dayOfWeek.substr(0, 3),
+                        hours: response.data[i].totalWork === null ? 0 : response.data[i].totalWork,
+                    };
+
+                    resultStats.push(object);
+                }
+
+                console.log(resultStats);
+                setData(resultStats);
                 setIsLoading(false);
             }
         } catch (error) {
@@ -39,37 +85,6 @@ function Dashboard() {
     useEffect(() => {
         fetchDetails();
     }, [params.empId]);
-
-    const data = [
-        {
-            name: 'MON',
-            hours: 8,
-        },
-        {
-            name: 'TUE',
-            hours: 6,
-        },
-        {
-            name: 'WED',
-            hours: 8,
-        },
-        {
-            name: 'THUR',
-            hours: 5,
-        },
-        {
-            name: 'FRI',
-            hours: 2,
-        },
-        {
-            name: 'SAT',
-            hours: 0,
-        },
-        {
-            name: 'SUN',
-            hours: 0,
-        },
-    ];
 
     const sorting = (col) => {
         setType(col);

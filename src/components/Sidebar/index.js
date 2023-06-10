@@ -6,7 +6,7 @@ import { faBars, faCode, faCouch, faGear, faPencil } from '@fortawesome/free-sol
 import { faClipboard, faClock, faComment, faFile, faIdBadge } from '@fortawesome/free-regular-svg-icons';
 import { faCodepen, faTeamspeak } from '@fortawesome/free-brands-svg-icons';
 import Menu from '../Menu';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 
 const cx = classNames.bind(styles);
@@ -113,10 +113,12 @@ function Sidebar() {
     };
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('logo')}>
-                <img src={images.logo} alt="Employee Timesheet" />
-                <p>Employee Timesheet</p>
-            </div>
+            <Link to="/">
+                <div className={cx('logo')}>
+                    <img src={images.logo} alt="Employee Timesheet" />
+                    <p>Employee Timesheet</p>
+                </div>
+            </Link>
 
             {SIDEBARMENU.map((menu) => (
                 <Menu

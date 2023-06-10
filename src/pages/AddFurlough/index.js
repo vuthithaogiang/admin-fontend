@@ -24,7 +24,7 @@ function AddFurlough() {
     const [state, setState] = useState([
         {
             startDate: new Date(),
-            endDate: addDays(new Date(), 2),
+            endDate: addDays(new Date(), 1),
             key: 'selection',
         },
     ]);
@@ -61,7 +61,7 @@ function AddFurlough() {
                 const response = await axios.post(
                     `/furlough?empId=${params.empId}`,
                     {
-                        offTo: format(state[0].startDate, 'yyyy-MM-dd'),
+                        offTo: format(state[0].endDate, 'yyyy-MM-dd'),
                         offFrom: format(state[0].startDate, 'yyyy-MM-dd'),
                         note: note,
                     },

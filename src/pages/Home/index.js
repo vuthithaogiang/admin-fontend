@@ -10,6 +10,7 @@ import Dashboard from '../Dashboard';
 import TimesheetDetails from '../TimesheetDetails';
 import DaysOff from '../DaysOff';
 import AddFurlough from '../AddFurlough';
+import HistoryFurloughs from '~/components/HistoryFurloughs';
 
 const cx = classNames.bind(styles);
 
@@ -60,6 +61,8 @@ function Home() {
                         {params.children === 'daysOff' && <DaysOff />}
 
                         {params.children === 'furloughAdd' && <AddFurlough />}
+
+                        {params.children === 'furlough' && <HistoryFurloughs />}
                     </div>
                 </>
             )}
