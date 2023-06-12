@@ -5,18 +5,12 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from '~/api/axios';
 
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
-import { DateRange } from 'react-date-range';
-import format from 'date-fns/format';
-import { addDays } from 'date-fns';
-
 const cx = classNames.bind(styles);
 
 function DashboardAdmin() {
     const [activityLog, setActivityLog] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [filter, setFilter] = useState('All');
+    const [filter, setFilter] = useState('Today');
 
     const fetchDetails = async () => {
         try {
@@ -52,7 +46,7 @@ function DashboardAdmin() {
                                     <strong>+2 pairds</strong> vs last month
                                 </span>
                             </div>
-                            <div className={cx('value')}>300</div>
+                            <div className={cx('value')}>5</div>
                             <div className={cx('type')}>Total Request Time off</div>
                         </div>
                         <div className={cx('sts-item')}>
@@ -62,7 +56,7 @@ function DashboardAdmin() {
                                     <strong>+3Hs longer</strong> vs last month
                                 </span>
                             </div>
-                            <div className={cx('value')}>300</div>
+                            <div className={cx('value')}>1300</div>
                             <div className={cx('type')}>Total Offline hours</div>
                         </div>
                         <div className={cx('sts-item')}>
@@ -82,7 +76,7 @@ function DashboardAdmin() {
                                     <strong>+3Hs longer</strong> vs last month
                                 </span>
                             </div>
-                            <div className={cx('value')}>300</div>
+                            <div className={cx('value')}>94752</div>
                             <div className={cx('type')}>Total Working hours</div>
                         </div>
                     </div>
@@ -114,7 +108,13 @@ function DashboardAdmin() {
                                             <img className={cx('log-avatar')} src={item.avatar} />
                                         </span>
                                         <span className={cx('full-name')}>
-                                            <strong>{item.fullNameEmp}</strong> is present.
+                                            <strong>{item.fullNameEmp}</strong> is{' '}
+                                            {item.type === 'check in' && (
+                                                <span className={cx('type-checkin')}>{item.type}</span>
+                                            )}
+                                            {item.type === 'check out' && (
+                                                <span className={cx('type-checkout')}>{item.type}</span>
+                                            )}
                                         </span>
                                     </div>
                                 ))}

@@ -1,0 +1,93 @@
+.wrapper {
+    border-top: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+.header h4 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 1;
+    padding: 8px 0;
+}
+
+.timesheet-filter,
+.item {
+    display: grid;
+    grid-template-columns: 68px repeat(7, 1fr);
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.timesheet-filter {
+    color: #666;
+    user-select: none;
+}
+
+.timesheet-filter .item-sort {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-down {
+    margin-top: -8px;
+}
+
+.icon-up {
+    margin-bottom: -8px;
+}
+
+.timesheet-filter span {
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+.item {
+    border: 1px solid #ddd;
+    padding: 12px 0;
+
+    span {
+        font-size: 1.5rem;
+        color: #1b3152;
+        font-weight: 500;
+    }
+}
+
+.item .time-in {
+    color: #88ae32;
+}
+
+.item .time-out {
+    color: #3d81c2;
+}
+
+.ite,
+.date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.item .day-off-week {
+    background-color: #90ccff;
+    width: 50px;
+    padding: 3px 0;
+    color: #656689;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+.thumbnail {
+    padding-left: 12px;
+}
+
+.thumbnail img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+}

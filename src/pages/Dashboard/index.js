@@ -8,6 +8,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'rec
 import { useParams } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router';
 
 const cx = classNames.bind(styles);
 
@@ -42,6 +43,8 @@ function Dashboard() {
             hours: 0,
         },
     ];
+
+    const navigate = useNavigate();
 
     const [data, setData] = useState(dataDefault);
     const [isLoading, setIsLoading] = useState(true);
@@ -301,14 +304,16 @@ function Dashboard() {
                                     {item.timeOut === null ? <span>_</span> : <span>{item.timeOutString}</span>}
                                     <span>{item.minusLate}</span>
                                     {item.totalWork === null ? <span>_</span> : <span>{item.totalWork}</span>}
-                                    {item.status === 1 && <span>Present</span>}
+                                    {item.status === 1 && <span className={cx('present')}>Present</span>}
                                     {item.status === 0 && <span>Absent</span>}
                                     <span>{item.position}</span>
                                 </div>
                             ))}
 
                             <div className={cx('view-all')}>
-                                <button>View all</button>
+                                <button onClick={() => navigate(`/view/${params.empId}/timesheetDetails`)}>
+                                    View all
+                                </button>
                             </div>
                         </div>
                     </div>

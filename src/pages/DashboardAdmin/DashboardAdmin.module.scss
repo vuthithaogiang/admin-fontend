@@ -127,3 +127,18 @@
     color: #292c3f;
     font-weight: 500;
 }
+
+.type-checkin,
+.type-checkout {
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.type-checkin {
+    color: #656689;
+}
+
+.type-checkout {
+    color: #ff997e;
+}
