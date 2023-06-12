@@ -93,7 +93,16 @@ function TimesheetAdmin() {
                     </div>
 
                     <div className={cx('timesheet-filter')}>
-                        <span className={cx('item-sort')}>Employee</span>
+                        <span className={cx('item-sort')} onClick={() => sorting('empId')}>
+                            Employee
+                            {type !== 'empId' && <FontAwesomeIcon icon={faSort} />}
+                            {type === 'empId' && filter === 'ASC' && (
+                                <FontAwesomeIcon className={cx('icon-down')} icon={faSortDown} />
+                            )}
+                            {type === 'empId' && filter === 'DESC' && (
+                                <FontAwesomeIcon className={cx('icon-up')} icon={faSortUp} />
+                            )}
+                        </span>
                         <span className={cx('item-sort')} onClick={() => sorting('dateIn')}>
                             Date
                             {type !== 'dateIn' && <FontAwesomeIcon icon={faSort} />}
@@ -178,7 +187,11 @@ function TimesheetAdmin() {
                             )}
                             <span>{item.minusLate}</span>
                             {item.totalWork === null ? <span>_</span> : <span>{item.totalWork}</span>}
-                            {item.status === 1 ? <span>Present</span> : <span>Absent</span>}
+                            {item.status === 1 ? (
+                                <span className={cx('status-present')}>Present</span>
+                            ) : (
+                                <span className={cx('status-absent')}>Absent</span>
+                            )}
                             <span>{item.position}</span>
                         </div>
                     ))}

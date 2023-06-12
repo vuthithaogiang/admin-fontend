@@ -66,6 +66,7 @@ function TimeOffAdmin() {
 
             console.log(response.data);
             if (response.data === []) {
+                document.alert('No data');
                 console.log('no data');
             } else {
                 setFurloughs(response.data);
@@ -187,6 +188,9 @@ function TimeOffAdmin() {
                                                 <FontAwesomeIcon icon={faXmark} />
                                             </span>
                                         )}
+
+                                        <span className={cx('btn-accept')}>Accept</span>
+                                        <span className={cx('btn-deny')}>Deny</span>
                                     </div>
                                 </>
                             ))}

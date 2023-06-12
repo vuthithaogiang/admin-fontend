@@ -260,3 +260,22 @@ body.active-modal {
     justify-content: center;
     cursor: pointer;
 }
+
+.btn-accept,
+.btn-deny {
+    background-color: #ddd;
+    margin-left: 12px;
+    padding: 5px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.btn-accept {
+    color: #87d6b5;
+    background-color: #ecfbf4;
+}
+
+.btn-deny {
+    color: #a92951;
+    background-color: #ffe7ef;
+}

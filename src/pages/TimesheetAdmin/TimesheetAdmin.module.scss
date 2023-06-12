@@ -1,13 +1,19 @@
 .wrapper {
-    padding: 20px;
+    padding-left: 20px;
 }
 
 .header {
+    position: fixed;
+    width: 77%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
-    border-bottom: 1px solid #ddd;
+    padding-bottom: 12px;
+    padding-top: 20px;
+    padding-right: 10px;
+    user-select: none;
+    z-index: 6;
+    background-color: #fff;
 }
 
 .header h4 {
@@ -24,6 +30,7 @@
     font-family: 'Sora', sans-serif;
     font-weight: 600;
     cursor: pointer;
+    color: #717171;
 }
 .header .type span.active {
     position: relative;
@@ -42,7 +49,7 @@
 .timesheet-filter,
 .item {
     display: grid;
-    grid-template-columns: 68px repeat(7, 1fr);
+    grid-template-columns: 84px repeat(7, 1fr);
     align-items: center;
     justify-content: center;
     gap: 12px;
@@ -51,6 +58,8 @@
 .timesheet-filter {
     color: #666;
     user-select: none;
+    padding-top: 80px;
+    padding-bottom: 8px;
 }
 
 .timesheet-filter .item-sort {
@@ -118,4 +127,20 @@
     height: 30px;
     object-fit: cover;
     border-radius: 50%;
+}
+
+.status-present,
+.status-absent {
+    width: fit-content;
+    padding: 4px 6px;
+    font-size: 1.4rem !important;
+    border-radius: 3px;
+}
+.status-present {
+    color: #87d6b5 !important;
+    background-color: #ecfbf4;
+}
+.status-absent {
+    color: #a92951 !important;
+    background-color: #ffe7ef;
 }

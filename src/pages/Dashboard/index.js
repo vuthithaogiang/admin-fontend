@@ -304,8 +304,8 @@ function Dashboard() {
                                     {item.timeOut === null ? <span>_</span> : <span>{item.timeOutString}</span>}
                                     <span>{item.minusLate}</span>
                                     {item.totalWork === null ? <span>_</span> : <span>{item.totalWork}</span>}
-                                    {item.status === 1 && <span className={cx('present')}>Present</span>}
-                                    {item.status === 0 && <span>Absent</span>}
+                                    {item.status === 1 && <span className={cx('status-present')}>Present</span>}
+                                    {item.status === 0 && <span className={cx('status-absent')}>Absent</span>}
                                     <span>{item.position}</span>
                                 </div>
                             ))}

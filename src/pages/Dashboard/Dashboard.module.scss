@@ -302,3 +302,20 @@
     background-color: transparent;
     cursor: pointer;
 }
+
+.status-absent,
+.status-present {
+    width: fit-content;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 1.4rem !important;
+}
+
+.status-present {
+    color: #87d6b5 !important;
+    background-color: #ecfbf4;
+}
+.status-absent {
+    color: #a92951 !important;
+    background-color: #ffe7ef;
+}
