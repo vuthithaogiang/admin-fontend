@@ -121,7 +121,7 @@ function TimesheetDetails() {
                         {listEmployee.map((item) => (
                             <div className={cx('item')} key={item.id}>
                                 <div className={cx('thumbnail')}>
-                                    <img src={item.avatar} />
+                                    <img src={item.avatar} alt="avatar" />
                                 </div>
 
                                 <span className={cx('date')}>
