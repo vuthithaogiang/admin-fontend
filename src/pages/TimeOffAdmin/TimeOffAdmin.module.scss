@@ -1,0 +1,262 @@
+.wrapper {
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    h4 {
+        font-family: 'Sora', sans-serif;
+        font-weight: 600;
+        font-size: 2rem;
+        line-height: 1;
+    }
+}
+
+.due-date {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    svg {
+        color: #0975de;
+        cursor: pointer;
+    }
+}
+
+.list-furlough {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    text-align: center;
+}
+
+.list-furlough .item-sort {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 1.5rem;
+    color: #666;
+}
+
+.list-furlough .item-sort:nth-child(2) {
+    svg {
+        color: #3d81c2;
+    }
+}
+
+.list-furlough .item-sort:nth-child(3) {
+    svg {
+        color: #ffd05a;
+    }
+}
+
+.list-furlough .item-sort:nth-child(4) {
+    svg {
+        color: #a6cf4a;
+    }
+}
+
+.list-furlough .item {
+    padding: 12px;
+    border: 1.4px solid #b6cae8;
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+.list-furlough .item.days-off {
+    cursor: pointer;
+}
+
+.item .avatar {
+    margin: 0 auto;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.accept,
+.deny {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+        color: #fff;
+        font-size: 1.1rem;
+    }
+}
+
+.deny {
+    background-color: #fb6238;
+}
+
+.accept {
+    background: #a6cf4a;
+}
+
+.time-off {
+    p {
+        font-size: 1.3rem;
+        padding: 8px 12px 6px 12px;
+        line-height: 1.6;
+    }
+
+    .time-from {
+        color: red;
+    }
+
+    .time-to {
+        color: #0166ff;
+    }
+}
+
+.container-calender {
+    position: absolute;
+    top: 60px;
+    right: 50px;
+    border: 1px solid #ddd;
+}
+
+//Modal
+
+body.active-modal {
+    overflow-y: hidden;
+}
+
+.modal,
+.overlay {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+}
+
+.overlay {
+    background: rgba(49, 49, 49, 0.8);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1.4;
+    background: #f1f1f1;
+    border-radius: 3px;
+    width: 500px;
+    padding-bottom: 12px;
+    user-select: none;
+}
+
+.thumbnail-img {
+    position: relative;
+}
+.banner {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(71.47deg, #f0ccdc 22.92%, #f4e6c2 62.85%, #d1deb4 96.68%);
+}
+
+.wrapper-avatar {
+    width: 140px;
+    height: 140px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 24px;
+    bottom: -30px;
+}
+
+.wrapper-avatar img {
+    width: 128px;
+    height: 128px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.profile-group {
+    text-align: left;
+    margin-top: 50px;
+    padding-left: 24px;
+}
+
+.profile-name {
+    h3 {
+        font-weight: 600;
+        font-size: 3rem;
+        line-height: 1.5;
+
+        color: #010101;
+    }
+}
+
+.address {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 2rem;
+    color: #717171;
+    svg {
+        color: #b6cae8;
+    }
+}
+
+.profile-infos {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    font-weight: 600;
+    font-size: 1.8rem;
+    line-height: 1.5;
+
+    span:not(:last-child) {
+        position: relative;
+
+        &::after {
+            position: absolute;
+            content: '';
+            top: 50%;
+            right: -18px;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #717171;
+        }
+    }
+}
+
+.modal-content .clear {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: #717171;
+    background-color: #ddd;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
