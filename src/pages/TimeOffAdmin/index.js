@@ -20,6 +20,8 @@ import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Calendar } from 'react-date-range';
 import format from 'date-fns/format';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
@@ -30,10 +32,12 @@ function TimeOffAdmin() {
     const [furloughs, setFurloughs] = useState([]);
     const [calendar, setCalendar] = useState('');
     const [openCalender, setOpenCalender] = useState(false);
-
-    const refOne = useRef(null);
-
     const [profile, setProfile] = useState({});
+    const [itemFurlough, setItemFurlough] = useState({});
+    const [typeHandleFurlough, setTypeHandleFurlough] = useState('');
+
+    const [isSendingRequest, setIsSendingRequest] = useState(false);
+    //const [sendSuccess, setSendSuccess] = useState(false);
 
     const toggleModal = () => {
         setModal(!modal);
@@ -45,12 +49,55 @@ function TimeOffAdmin() {
     }
     useOnClickOutside(refModal, toggleModal);
 
+    const notifyError = () => {
+        toast.error(`Send request failed! 🎉`, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
+    };
+
+    const notifySuccess = () => {
+        toast.success(`Send request successfully! 🎉`, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
+    };
+
     const handelOpenProfile = (profile) => {
-        if (profile != {}) {
+        if (profile !== {}) {
             console.log(profile);
             setProfile(profile);
+            setTypeHandleFurlough('openProfile');
             setModal(true);
         } else {
+        }
+    };
+
+    const handleShowFormAcceptFurlough = (furlough) => {
+        if (furlough !== {}) {
+            setItemFurlough(furlough);
+            setTypeHandleFurlough('accept');
+            setModal(true);
+        }
+    };
+
+    const handleShowFormDenyFurlough = (furlough) => {
+        if (furlough !== {}) {
+            setItemFurlough(furlough);
+            setTypeHandleFurlough('deny');
+            setModal(true);
         }
     };
 
@@ -81,9 +128,60 @@ function TimeOffAdmin() {
         setCalendar(format(date, 'yyyy-MM-dd'));
     };
 
+    const handleAccepted = async (itemFurlough) => {
+        setIsSendingRequest(true);
+
+        console.log(itemFurlough);
+        try {
+            const body = {
+                furloughId: itemFurlough.furLoughInteger,
+                offFrom: itemFurlough.offFrom,
+                offTo: itemFurlough.offTo,
+                note: itemFurlough.note,
+            };
+            const response = await axios.patch('/furlough/accept', body);
+
+            console.log(response.data);
+
+            if (response.data === 'undefined') {
+                console.log('failed');
+            } else {
+                setIsSendingRequest(false);
+                notifySuccess();
+            }
+        } catch (error) {
+            notifyError();
+        }
+    };
+
+    const handleDenied = async (itemFurlough) => {
+        setIsSendingRequest(true);
+
+        try {
+            const body = {
+                furloughId: itemFurlough.furLoughInteger,
+                offFrom: itemFurlough.offFrom,
+                offTo: itemFurlough.offTo,
+                note: itemFurlough.note,
+            };
+            const response = await axios.patch('/furlough/deny', body);
+
+            console.log(response.data);
+
+            if (response.data === 'undefined') {
+                console.log('failed');
+            } else {
+                setIsSendingRequest(false);
+                notifySuccess();
+            }
+        } catch (error) {
+            notifyError();
+        }
+    };
+
     useEffect(() => {
         fetDetails();
-    }, [calendar]);
+    }, [calendar, isSendingRequest]);
 
     return (
         <>
@@ -189,13 +287,23 @@ function TimeOffAdmin() {
                                             </span>
                                         )}
 
-                                        <span className={cx('btn-accept')}>Accept</span>
-                                        <span className={cx('btn-deny')}>Deny</span>
+                                        <span
+                                            className={cx('btn-accept')}
+                                            onClick={() => handleShowFormAcceptFurlough(item)}
+                                        >
+                                            Accept
+                                        </span>
+                                        <span
+                                            className={cx('btn-deny')}
+                                            onClick={() => handleShowFormDenyFurlough(item)}
+                                        >
+                                            Deny
+                                        </span>
                                     </div>
                                 </>
                             ))}
 
-                            {modal && profile !== {} && (
+                            {modal && profile !== {} && typeHandleFurlough === 'openProfile' && (
                                 <>
                                     <div className={cx('modal')}>
                                         <div className={cx('overlay')} onClick={toggleModal}></div>
@@ -232,8 +340,127 @@ function TimeOffAdmin() {
                                     </div>
                                 </>
                             )}
+
+                            {modal && typeHandleFurlough === 'accept' && (
+                                <>
+                                    <div className={cx('modal')}>
+                                        <div className={cx('overlay')} onClick={toggleModal}></div>
+                                        <div className={cx('modal-content-furlough')}>
+                                            {' '}
+                                            <PopperWrapper>
+                                                {isSendingRequest === false && (
+                                                    <>
+                                                        <div className={cx('repeat')}>
+                                                            <img src={itemFurlough.employee.avatar} alt="avatar" />
+                                                            <div className={cx('repeat-content')}>
+                                                                <span className={cx('full-name-emp')}>
+                                                                    {itemFurlough.employee.fullName}
+                                                                </span>
+                                                                <span>
+                                                                    send requests off {itemFurlough.totalDaysOff} days
+                                                                    from{' '}
+                                                                    <span className={cx('day-off-from')}>
+                                                                        {' '}
+                                                                        {itemFurlough.offFrom}
+                                                                    </span>{' '}
+                                                                    to
+                                                                    <span className={cx('day-off-to')}>
+                                                                        {' '}
+                                                                        {itemFurlough.offTo}
+                                                                    </span>{' '}
+                                                                    with reason: {itemFurlough.note}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className={cx('btns-action')}>
+                                                            <p>Are you sure acccept that request?</p>
+                                                            <div>
+                                                                <button
+                                                                    className={cx('yes')}
+                                                                    onClick={() => handleAccepted(itemFurlough)}
+                                                                >
+                                                                    Yes
+                                                                </button>
+                                                                <button onClick={toggleModal}>No</button>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                )}
+
+                                                {isSendingRequest === true && <span>Sending requuest</span>}
+                                            </PopperWrapper>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
+                            {modal && typeHandleFurlough === 'deny' && (
+                                <>
+                                    <div className={cx('modal')}>
+                                        <div className={cx('overlay')} onClick={toggleModal}></div>
+                                        <div className={cx('modal-content-furlough')}>
+                                            {' '}
+                                            {isSendingRequest === false && (
+                                                <>
+                                                    <PopperWrapper>
+                                                        <div className={cx('repeat')}>
+                                                            <img src={itemFurlough.employee.avatar} alt="avatar" />
+                                                            <div className={cx('repeat-content')}>
+                                                                <span className={cx('full-name-emp')}>
+                                                                    {itemFurlough.employee.fullName}
+                                                                </span>
+                                                                <span>
+                                                                    send requests off {itemFurlough.totalDaysOff} days
+                                                                    from{' '}
+                                                                    <span className={cx('day-off-from')}>
+                                                                        {' '}
+                                                                        {itemFurlough.offFrom}
+                                                                    </span>{' '}
+                                                                    to{' '}
+                                                                    <span className={cx('day-off-to')}>
+                                                                        {itemFurlough.offTo}
+                                                                    </span>{' '}
+                                                                    with reason: {itemFurlough.note}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className={cx('btns-action')}>
+                                                            <p>Are you sure deny that request?</p>
+                                                            <div>
+                                                                <button
+                                                                    className={cx('yes')}
+                                                                    onClick={() => handleDenied(itemFurlough)}
+                                                                >
+                                                                    Yes
+                                                                </button>
+                                                                <button onClick={toggleModal}>No</button>
+                                                            </div>
+                                                        </div>
+                                                    </PopperWrapper>
+                                                </>
+                                            )}
+                                            {isSendingRequest === true && <span>Sending request</span>}
+                                        </div>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
+
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="light"
+                    ></ToastContainer>
                 </>
             )}
         </>

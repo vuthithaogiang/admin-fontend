@@ -130,7 +130,7 @@
     border: 1px solid #ddd;
 }
 
-//Modal
+//Modal common
 
 body.active-modal {
     overflow-y: hidden;
@@ -150,6 +150,105 @@ body.active-modal {
 .overlay {
     background: rgba(49, 49, 49, 0.8);
 }
+
+//modal Furlough
+.modal-content-furlough {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.repeat {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 20px;
+}
+.repeat-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.repeat-content span:nth-child(2) {
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1.7;
+
+    color: #656689;
+    margin-top: 6px;
+}
+
+.day-off-from,
+.day-off-to {
+    padding: 4px 6px;
+    border-radius: 2px;
+}
+
+.day-off-from {
+    color: #87d6b5 !important;
+    background-color: #ecfbf4;
+}
+
+.day-off-to {
+    color: #a92951 !important;
+    background-color: #ffe7ef;
+}
+.full-name-emp {
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 2.3rem;
+    line-height: 1;
+
+    color: #48496a;
+}
+
+.repeat img {
+    width: 62px;
+    height: 62px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.btns-action {
+    border-top: 2px solid #ddd;
+    padding-top: 12px;
+    padding-bottom: 20px;
+}
+
+.btns-action p {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 2.3rem;
+    line-height: 1;
+
+    color: #48496a;
+}
+
+.btns-action div {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 20px 20px 0 20px;
+
+    button {
+        flex: 1;
+        padding: 12px 0;
+        cursor: pointer;
+        font-size: 1.8rem;
+        font-weight: 600;
+        border-radius: 4px;
+    }
+
+    button.yes {
+        background-color: #0166ff;
+        color: #fff;
+    }
+}
+
+//modal Profile
 
 .modal-content {
     position: absolute;

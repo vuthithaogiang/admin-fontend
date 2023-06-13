@@ -59,10 +59,9 @@ function Dashboard() {
     const fetchDetails = async () => {
         try {
             const response = await axios.get(`/timesheetDetails/getAllByEmpIdOnWeek/${params.empId}`);
+            const rechartData = await axios.get(`/timesheetDetails/getAllByEmpIdLastWeek/${params.empId}`);
 
-            console.log(response.data);
-
-            if (response.data === []) {
+            if ((response.data === []) | (rechartData === [])) {
                 console.log('undefined!!');
             } else {
                 setEmployeeInfo(response.data);
@@ -70,14 +69,14 @@ function Dashboard() {
                 const resultStats = [];
                 let totalHs = 0;
 
-                for (var i = 0; i < response.data.length; i++) {
+                for (var i = 0; i < rechartData.data.length; i++) {
                     var object = {
-                        name: response.data[i].dayOfWeek.substr(0, 3),
-                        hours: response.data[i].totalWork === null ? 0 : response.data[i].totalWork,
+                        name: rechartData.data[i].dayOfWeek.substr(0, 3),
+                        hours: rechartData.data[i].totalWork === null ? 0 : rechartData.data[i].totalWork,
                     };
 
                     resultStats.push(object);
-                    totalHs += response.data[i].totalWork;
+                    totalHs += rechartData.data[i].totalWork;
                 }
 
                 console.log(resultStats);
