@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './AddFurlough.module.scss';
 import images from '~/assets/images';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faClock, faFile, fas } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faClock, faFile } from '@fortawesome/free-solid-svg-icons';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRangePicker } from 'react-date-range';

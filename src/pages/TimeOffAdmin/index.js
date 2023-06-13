@@ -18,8 +18,9 @@ import { Wrapper as PopperWrapper } from '~/components/Popper';
 import useOnClickOutside from '~/hooks/useOnClickOutside';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { Calendar } from 'react-date-range';
+import { Calendar, DateRange } from 'react-date-range';
 import format from 'date-fns/format';
+import { addDays } from 'date-fns';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -34,10 +35,21 @@ function TimeOffAdmin() {
     const [openCalender, setOpenCalender] = useState(false);
     const [profile, setProfile] = useState({});
     const [itemFurlough, setItemFurlough] = useState({});
+    const [note, setNote] = useState('');
     const [typeHandleFurlough, setTypeHandleFurlough] = useState('');
+
+    const [itemUpdate, setItemUpdate] = useState({});
 
     const [isSendingRequest, setIsSendingRequest] = useState(false);
     //const [sendSuccess, setSendSuccess] = useState(false);
+
+    const [state, setState] = useState([
+        {
+            startDate: new Date(),
+            endDate: addDays(new Date(), 0),
+            key: 'selection',
+        },
+    ]);
 
     const toggleModal = () => {
         setModal(!modal);
@@ -97,6 +109,14 @@ function TimeOffAdmin() {
         if (furlough !== {}) {
             setItemFurlough(furlough);
             setTypeHandleFurlough('deny');
+            setModal(true);
+        }
+    };
+
+    const handleShowFormUpdateFurlough = (item) => {
+        if (item !== {}) {
+            setItemUpdate(item);
+            setTypeHandleFurlough('update');
             setModal(true);
         }
     };
@@ -170,6 +190,7 @@ function TimeOffAdmin() {
 
             if (response.data === 'undefined') {
                 console.log('failed');
+                notifyError();
             } else {
                 setIsSendingRequest(false);
                 notifySuccess();
@@ -177,6 +198,32 @@ function TimeOffAdmin() {
         } catch (error) {
             notifyError();
         }
+    };
+
+    const handleSubmitUpdate = async (itemUpdate) => {
+        setIsSendingRequest(true);
+
+        try {
+            const body = {
+                furloughId: itemUpdate.furLoughInteger,
+                offFrom: format(state[0].startDate, 'yyyy-MM-dd'),
+                offTo: format(state[0].endDate, 'yyyy-MM-dd'),
+                note: note,
+            };
+
+            const response = axios.patch('/furlough/update', body);
+
+            if (response.data === 'undefined') {
+                notifyError();
+            } else {
+                setIsSendingRequest(false);
+                notifySuccess();
+                window.location.reload(false);
+            }
+        } catch (error) {
+            notifyError();
+        }
+        console.log(itemUpdate);
     };
 
     useEffect(() => {
@@ -234,7 +281,10 @@ function TimeOffAdmin() {
                             {furloughs.map((item) => (
                                 <>
                                     {/* 1 */}
-                                    <div className={cx('item')} key={item.furloughId}>
+                                    <div className={cx('item', 'group-avatar')} key={item.furloughId}>
+                                        <span className={cx('edit')} onClick={() => handleShowFormUpdateFurlough(item)}>
+                                            ✍️
+                                        </span>
                                         <img
                                             className={cx('avatar')}
                                             src={item.employee.avatar}
@@ -441,6 +491,136 @@ function TimeOffAdmin() {
                                                     </PopperWrapper>
                                                 </>
                                             )}
+                                            {isSendingRequest === true && <span>Sending request</span>}
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
+                            {modal && typeHandleFurlough === 'update' && (
+                                <>
+                                    <div className={cx('modal')}>
+                                        <div className={cx('overlay')} onClick={toggleModal}></div>
+                                        <div className={cx('modal-content-furlough')}>
+                                            {isSendingRequest === false && (
+                                                <div>
+                                                    <PopperWrapper className={cx('wrap-form')}>
+                                                        <div className={cx('form')}>
+                                                            <div className={cx('form-group')}>
+                                                                <div className={cx('form-label')}>
+                                                                    <FontAwesomeIcon icon={faClock} />
+                                                                    <span>Time off Type</span>
+                                                                </div>
+
+                                                                <div className={cx('content')}>
+                                                                    <div
+                                                                        className={
+                                                                            note === 'PTO'
+                                                                                ? cx('item', 'active')
+                                                                                : cx('item')
+                                                                        }
+                                                                        onClick={() => setNote('PTO')}
+                                                                    >
+                                                                        <p>PTO</p>
+                                                                    </div>
+                                                                    <div
+                                                                        className={
+                                                                            note === 'Slick Leave'
+                                                                                ? cx('item', 'active')
+                                                                                : cx('item')
+                                                                        }
+                                                                        onClick={() => setNote('Slick Leave')}
+                                                                    >
+                                                                        <p>Slick Leave</p>
+                                                                    </div>
+                                                                    <div
+                                                                        className={
+                                                                            note === 'Parent Duty'
+                                                                                ? cx('item', 'active')
+                                                                                : cx('item')
+                                                                        }
+                                                                        onClick={() => setNote('Parent Duty')}
+                                                                    >
+                                                                        <p>Parent Duty</p>
+                                                                    </div>
+                                                                    <div
+                                                                        className={
+                                                                            note === `Covid-19 Family Care`
+                                                                                ? cx('item', 'active')
+                                                                                : cx('item')
+                                                                        }
+                                                                        onClick={() => setNote('Covid-19 Family Care')}
+                                                                    >
+                                                                        <p>Covid-19 Family Care</p>
+                                                                    </div>
+                                                                    <div
+                                                                        className={
+                                                                            note === 'Vacation'
+                                                                                ? cx('item', 'active')
+                                                                                : cx('item')
+                                                                        }
+                                                                        onClick={() => setNote('Vacation')}
+                                                                    >
+                                                                        <p>Vacation</p>
+                                                                    </div>
+                                                                    <div
+                                                                        className={
+                                                                            note === `Covid-19 Selfcare`
+                                                                                ? cx('item', 'active')
+                                                                                : cx('item')
+                                                                        }
+                                                                        onClick={() => setNote('Covid-19 Selfcare')}
+                                                                    >
+                                                                        <p>Covid-19 Selfcare</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className={cx('form-group')}>
+                                                                <div className={cx('form-label')}>
+                                                                    <FontAwesomeIcon icon={faCalendar} />
+                                                                    <span>Start-Time Off</span>
+                                                                </div>
+                                                                <div className={cx('content')}>
+                                                                    <div className={cx('calender-wrap')}>
+                                                                        <DateRange
+                                                                            onChange={(item) =>
+                                                                                setState([item.selection])
+                                                                            }
+                                                                            showSelectionPreview={true}
+                                                                            moveRangeOnFirstSelection={false}
+                                                                            months={1}
+                                                                            ranges={state}
+                                                                            direction="horizontal"
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className={cx('form-group')}>
+                                                                <div className={cx('form-label')}>
+                                                                    <FontAwesomeIcon icon={faFile} />
+                                                                    <span>Time Off Reason</span>
+                                                                </div>
+
+                                                                <div className={cx('content')}>
+                                                                    <textarea placeholder="Add reason"></textarea>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className={cx('submit')}>
+                                                                <button>Cancel</button>
+                                                                <button
+                                                                    className={cx('send')}
+                                                                    onClick={() => handleSubmitUpdate(itemUpdate)}
+                                                                >
+                                                                    Save
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </PopperWrapper>
+                                                </div>
+                                            )}
+
                                             {isSendingRequest === true && <span>Sending request</span>}
                                         </div>
                                     </div>
