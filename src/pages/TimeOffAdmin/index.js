@@ -35,6 +35,7 @@ function TimeOffAdmin() {
     const [openCalender, setOpenCalender] = useState(false);
     const [profile, setProfile] = useState({});
     const [itemFurlough, setItemFurlough] = useState({});
+    const [itemDelete, setItemDelete] = useState({});
     const [note, setNote] = useState('');
     const [typeHandleFurlough, setTypeHandleFurlough] = useState('');
 
@@ -43,13 +44,15 @@ function TimeOffAdmin() {
     const [isSendingRequest, setIsSendingRequest] = useState(false);
     //const [sendSuccess, setSendSuccess] = useState(false);
 
-    const [state, setState] = useState([
+    const stateDefault = [
         {
             startDate: new Date(),
             endDate: addDays(new Date(), 0),
             key: 'selection',
         },
-    ]);
+    ];
+
+    const [state, setState] = useState(stateDefault);
 
     const toggleModal = () => {
         setModal(!modal);
@@ -109,6 +112,14 @@ function TimeOffAdmin() {
         if (furlough !== {}) {
             setItemFurlough(furlough);
             setTypeHandleFurlough('deny');
+            setModal(true);
+        }
+    };
+
+    const handleShowFormDeleteFurlough = async (item) => {
+        if (item !== {}) {
+            setItemDelete(item);
+            setTypeHandleFurlough('delete');
             setModal(true);
         }
     };
@@ -203,27 +214,48 @@ function TimeOffAdmin() {
     const handleSubmitUpdate = async (itemUpdate) => {
         setIsSendingRequest(true);
 
+        if (note !== '') {
+            try {
+                const body = {
+                    furloughId: itemUpdate.furLoughInteger,
+                    offFrom: format(state[0].startDate, 'yyyy-MM-dd'),
+                    offTo: format(state[0].endDate, 'yyyy-MM-dd'),
+                    note: note,
+                };
+
+                const response = axios.patch('/furlough/update', body);
+
+                if (response.data === 'undefined') {
+                    notifyError();
+                } else {
+                    setIsSendingRequest(false);
+                    notifySuccess();
+                    window.location.reload(false);
+                }
+            } catch (error) {
+                notifyError();
+            }
+        } else {
+            notifyError();
+        }
+    };
+
+    const handleDelete = async (itemDelete) => {
+        setIsSendingRequest(true);
+
         try {
-            const body = {
-                furloughId: itemUpdate.furLoughInteger,
-                offFrom: format(state[0].startDate, 'yyyy-MM-dd'),
-                offTo: format(state[0].endDate, 'yyyy-MM-dd'),
-                note: note,
-            };
+            const response = await axios.delete(`/furlough/delete/${itemDelete}`);
 
-            const response = axios.patch('/furlough/update', body);
-
-            if (response.data === 'undefined') {
+            if (response.data === null) {
                 notifyError();
             } else {
                 setIsSendingRequest(false);
+                setModal(false);
                 notifySuccess();
-                window.location.reload(false);
             }
         } catch (error) {
             notifyError();
         }
-        console.log(itemUpdate);
     };
 
     useEffect(() => {
@@ -282,9 +314,20 @@ function TimeOffAdmin() {
                                 <>
                                     {/* 1 */}
                                     <div className={cx('item', 'group-avatar')} key={item.furloughId}>
-                                        <span className={cx('edit')} onClick={() => handleShowFormUpdateFurlough(item)}>
-                                            ✍️
-                                        </span>
+                                        <div>
+                                            <span
+                                                className={cx('edit')}
+                                                onClick={() => handleShowFormUpdateFurlough(item)}
+                                            >
+                                                ✍️
+                                            </span>
+                                            <span
+                                                onClick={() => handleShowFormDeleteFurlough(item)}
+                                                className={cx('delete')}
+                                            >
+                                                🔥
+                                            </span>
+                                        </div>
                                         <img
                                             className={cx('avatar')}
                                             src={item.employee.avatar}
@@ -505,6 +548,28 @@ function TimeOffAdmin() {
                                             {isSendingRequest === false && (
                                                 <div>
                                                     <PopperWrapper className={cx('wrap-form')}>
+                                                        <div className={cx('repeat-content', 'update')}>
+                                                            <span className={cx('full-name-emp')}>
+                                                                {itemUpdate.employee.fullName}
+                                                            </span>
+                                                            <span>
+                                                                send requests off {itemUpdate.totalDaysOff} days from{' '}
+                                                                <span className={cx('day-off-from')}>
+                                                                    {' '}
+                                                                    {state === stateDefault
+                                                                        ? itemUpdate.offFrom
+                                                                        : format(state[0].startDate, 'yyyy-MM-dd')}
+                                                                </span>{' '}
+                                                                to
+                                                                <span className={cx('day-off-to')}>
+                                                                    {' '}
+                                                                    {state === stateDefault
+                                                                        ? itemUpdate.offTo
+                                                                        : format(state[0].endDate, 'yyyy-MM-dd')}
+                                                                </span>{' '}
+                                                                with reason: {note === '' ? itemUpdate.note : note}
+                                                            </span>
+                                                        </div>
                                                         <div className={cx('form')}>
                                                             <div className={cx('form-group')}>
                                                                 <div className={cx('form-label')}>
@@ -608,7 +673,7 @@ function TimeOffAdmin() {
                                                             </div>
 
                                                             <div className={cx('submit')}>
-                                                                <button>Cancel</button>
+                                                                <button onClick={toggleModal}>Cancel</button>
                                                                 <button
                                                                     className={cx('send')}
                                                                     onClick={() => handleSubmitUpdate(itemUpdate)}
@@ -621,6 +686,59 @@ function TimeOffAdmin() {
                                                 </div>
                                             )}
 
+                                            {isSendingRequest === true && <span>Sending request</span>}
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                            {modal && typeHandleFurlough === 'delete' && (
+                                <>
+                                    <div className={cx('modal')}>
+                                        <div className={cx('overlay')} onClick={toggleModal}></div>
+                                        <div className={cx('modal-content-furlough')}>
+                                            {' '}
+                                            {isSendingRequest === false && (
+                                                <>
+                                                    <PopperWrapper>
+                                                        <div className={cx('repeat')}>
+                                                            <img src={itemDelete.employee.avatar} alt="avatar" />
+                                                            <div className={cx('repeat-content')}>
+                                                                <span className={cx('full-name-emp')}>
+                                                                    {itemDelete.employee.fullName}
+                                                                </span>
+                                                                <span>
+                                                                    send requests off {itemFurlough.totalDaysOff} days
+                                                                    from{' '}
+                                                                    <span className={cx('day-off-from')}>
+                                                                        {' '}
+                                                                        {itemDelete.offFrom}
+                                                                    </span>{' '}
+                                                                    to{' '}
+                                                                    <span className={cx('day-off-to')}>
+                                                                        {itemDelete.offTo}
+                                                                    </span>{' '}
+                                                                    with reason: {itemDelete.note}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className={cx('btns-action')}>
+                                                            <p>Are you sure want to delete that request?</p>
+                                                            <div>
+                                                                <button
+                                                                    className={cx('yes')}
+                                                                    onClick={() =>
+                                                                        handleDelete(itemDelete.furLoughInteger)
+                                                                    }
+                                                                >
+                                                                    Yes
+                                                                </button>
+                                                                <button onClick={toggleModal}>No</button>
+                                                            </div>
+                                                        </div>
+                                                    </PopperWrapper>
+                                                </>
+                                            )}
                                             {isSendingRequest === true && <span>Sending request</span>}
                                         </div>
                                     </div>

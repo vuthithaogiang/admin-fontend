@@ -73,11 +73,11 @@
 }
 
 .item.group-avatar {
+    padding-left: 12px;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 24px;
-
+    .delete,
     .edit {
         border: 1px solid transparent;
         padding: 2px 4px;
@@ -86,10 +86,17 @@
         box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.05);
         border-radius: 4px;
     }
-
+    .delete:hover,
     .edit:hover {
         border: 1px solid #ddd;
     }
+}
+
+.item.item.group-avatar > div {
+    padding-right: 4px;
+    display: flex;
+    gap: 4px;
+    border-right: 1px solid #ddd;
 }
 
 .item .avatar {
@@ -405,7 +412,8 @@ body.active-modal {
 }
 
 .form {
-    padding: 50px;
+    margin-top: 70px;
+    padding: 50px 120px 50px 50px;
 }
 
 .form-group {
@@ -496,4 +504,18 @@ body.active-modal {
 .submit button.send {
     background-color: #0f1b4c;
     color: #fff;
+}
+
+.repeat-content.update {
+    width: 100%;
+    padding-left: 12px;
+    padding-top: 18px;
+    padding-bottom: 12px;
+    padding-right: 12px;
+    border-bottom: 2px solid #ddd;
+    position: fixed;
+    background-color: #fff;
+    z-index: 10;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 }

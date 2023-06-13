@@ -16,7 +16,7 @@ function Dashboard() {
     const dataDefault = [
         {
             name: 'MON',
-            hours: null,
+            hours: 0,
         },
         {
             name: 'TUE',
@@ -78,6 +78,16 @@ function Dashboard() {
                     resultStats.push(object);
                     totalHs += rechartData.data[i].totalWork;
                 }
+
+                const data = [];
+
+                // for(var i = 0 ; i < dataDefault.length; i ++ ) {
+                //     for(var j = 0 ; j < resultStats.length; j ++ ){
+                //         if(resultStats[j].name !== dataDefault)
+                //     }
+                // }
+
+                console.log('DATA : ', data);
 
                 console.log(resultStats);
                 setData(resultStats);
