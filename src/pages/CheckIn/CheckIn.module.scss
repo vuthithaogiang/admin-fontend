@@ -342,7 +342,7 @@ body.active-modal {
         width: 100%;
         height: 100%;
         background-color: transparent;
-        padding: 8px 0;
+        padding: 5px 0;
         font-weight: 600;
         font-size: 1.6rem;
         cursor: pointer;
@@ -361,4 +361,50 @@ body.active-modal {
 
 .see-password {
     cursor: pointer;
+}
+
+.status {
+    color: #fb6238;
+    font-size: 1.3rem;
+    margin-top: 12px;
+    display: inline-block;
+}
+
+.status-success {
+    //background-color: #d8e2fc;
+    background-color: #f6f8f8;
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.status-success span:nth-child(2) {
+    font-size: 2.4rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
+.wrap-icon-success {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #76db98;
+    border-radius: 50%;
+    margin-bottom: 12px;
+
+    svg {
+        color: #fff;
+        font-size: 2.2rem;
+    }
+}
+
+.go-to-dashboard {
+    text-decoration: underline;
+    padding: 4px 0;
+    cursor: pointer;
+    font-size: 1.8rem;
 }

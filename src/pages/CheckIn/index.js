@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import useOnClickOutside from '~/hooks/useOnClickOutside';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faEye, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faEye, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
@@ -24,8 +24,12 @@ function CheckIn() {
     const [empId, setEmpId] = useState('');
     const [success, setSucces] = useState(false);
     const [modal, setModal] = useState(false);
-    const [isSendingRequest, setIsSendingRequest] = useState(false);
+
     const [seePassword, setSeePassword] = useState(false);
+
+    const [empIdInput, setEmpIdInput] = useState('');
+    const [passwordValueInput, setPasswordValueInput] = useState('');
+    const [status, setStatus] = useState('');
 
     const [type, setType] = useState('');
 
@@ -95,22 +99,26 @@ function CheckIn() {
     };
 
     const handleSubmit = async () => {
-        try {
-            const response = await axios.post(`timesheet?empId=${empId}`);
-            console.log(response.data);
+        if (empId === '') {
+            notifyWarning();
+        } else {
+            try {
+                const response = await axios.post(`timesheet?empId=${empId}`);
+                console.log(response.data);
 
-            if (typeof response.data === 'undefined') {
-                setSucces(false);
-                notifyError();
-            } else {
-                setSucces(true);
-                notifySuccess();
-            }
-        } catch (error) {
-            if (error.response?.status === 500 || error.response?.status === 400) {
-                console.log('emp id error!');
-                setSucces(false);
-                notifyError();
+                if (typeof response.data === 'undefined') {
+                    setSucces(false);
+                    notifyError();
+                } else {
+                    setSucces(true);
+                    notifySuccess();
+                }
+            } catch (error) {
+                if (error.response?.status === 500 || error.response?.status === 400) {
+                    console.log('emp id error!');
+                    setSucces(false);
+                    notifyError();
+                }
             }
         }
     };
@@ -120,13 +128,33 @@ function CheckIn() {
         setType('form-employee');
     };
 
-    const handleLogin = () => {
-        if (success === false || empId === '') {
-            notifyWarning();
+    const handleOpenFormLoginAdmin = () => {
+        setModal(true);
+        setType('form-admin');
+    };
+
+    const handleLogin = async () => {
+        if (empIdInput.trim() === '' || passwordValueInput.trim() === '') {
+            setStatus('Field is empty!');
         } else {
-            navigate(`view/${empId}/dashboard`);
+            const body = {
+                empId: empIdInput,
+                password: passwordValueInput,
+            };
+
+            try {
+                const response = await axios.post(`/employee/auth`, body);
+                console.log(response);
+
+                if (response.data) {
+                    setStatus(response.data);
+                }
+            } catch (error) {
+                if (error.response?.status === 500 || error.response?.status === 400) {
+                    console.log('failed!');
+                }
+            }
         }
-        console.log('handle login');
     };
 
     const handleLoginAdmin = () => {
@@ -183,7 +211,7 @@ function CheckIn() {
                     </div>
 
                     <div className={cx('login', 'admin')}>
-                        <button onClick={handleLoginAdmin}>Go to Dashboard if You are admin</button>
+                        <button onClick={handleOpenFormLoginAdmin}>Go to Dashboard if You are admin</button>
                     </div>
                 </div>
 
@@ -193,66 +221,121 @@ function CheckIn() {
 
                 {modal && type === 'form-employee' && (
                     <>
-                        {isSendingRequest === false && (
-                            <>
-                                <div className={cx('modal')}>
-                                    <div className={cx('overlay')} onClick={toggleModal}></div>
-                                    <PopperWrapper className={cx('modal-content')}>
-                                        <div className={cx('inner-content')}>
-                                            <div className={cx('form-login')}>
-                                                <div className={cx('form-header')}>
-                                                    <h3>Hello Again! Welcome back</h3>
-                                                    <p>Welcome back! Pleaase enter your details.</p>
-                                                </div>
-                                                <div className={cx('form-group')}>
-                                                    <label htmlFor="email" className={cx('form-label')}>
-                                                        {' '}
-                                                        <FontAwesomeIcon icon={faEnvelope} />
-                                                    </label>
-                                                    <input
-                                                        className={cx('form-login-input')}
-                                                        id="email"
-                                                        placeholder="Email"
-                                                        type="text"
-                                                    />
-                                                </div>
-
-                                                <div className={cx('form-group')}>
-                                                    <label htmlFor="password" className={cx('form-label')}>
-                                                        <FontAwesomeIcon icon={faLock} />
-                                                    </label>
-                                                    <input
-                                                        className={cx('form-login-input')}
-                                                        id="password"
-                                                        placeholder="Password"
-                                                        type={seePassword === false && 'password'}
-                                                    />
-                                                    <FontAwesomeIcon
-                                                        className={cx('see-password')}
-                                                        icon={faEye}
-                                                        onClick={toggleSeePassword}
-                                                    />
-                                                </div>
-
-                                                <div className={cx('form-group', 'form-group-login')}>
-                                                    <button className={cx('btn-login')}>Log In</button>
-                                                </div>
+                        <>
+                            <div className={cx('modal')}>
+                                <div className={cx('overlay')} onClick={toggleModal}></div>
+                                <PopperWrapper className={cx('modal-content')}>
+                                    <div className={cx('inner-content')}>
+                                        <div className={cx('form-login')}>
+                                            <div className={cx('form-header')}>
+                                                <h3>Hello Again! Welcome back</h3>
+                                                <p>Welcome back! Pleaase enter your details.</p>
                                             </div>
-                                            <div className={cx('video')}>
-                                                <video autoPlay muted loop playsInline className={cx('video')}>
-                                                    <source
-                                                        src="https://i.etsystatic.com/site-assets/impact/impact-page/header-hero.mp4"
-                                                        type="video/mp4"
-                                                    ></source>
-                                                </video>
-                                            </div>
+                                            {status !== 'Authenticated Employee' && (
+                                                <>
+                                                    <div className={cx('form-group')}>
+                                                        <label htmlFor="empId" className={cx('form-label')}>
+                                                            {' '}
+                                                            <FontAwesomeIcon icon={faUser} />
+                                                        </label>
+                                                        <input
+                                                            className={cx('form-login-input')}
+                                                            id="EmpId"
+                                                            placeholder="Employee Id"
+                                                            value={empIdInput}
+                                                            onChange={(e) => setEmpIdInput(e.target.value)}
+                                                            type="text"
+                                                        />
+                                                    </div>
+
+                                                    <div className={cx('form-group')}>
+                                                        <label htmlFor="password" className={cx('form-label')}>
+                                                            <FontAwesomeIcon icon={faLock} />
+                                                        </label>
+                                                        <input
+                                                            className={cx('form-login-input')}
+                                                            id="password"
+                                                            value={passwordValueInput}
+                                                            onChange={(e) => setPasswordValueInput(e.target.value)}
+                                                            placeholder="Password"
+                                                            type={seePassword === false && 'password'}
+                                                        />
+                                                        <FontAwesomeIcon
+                                                            className={cx('see-password')}
+                                                            icon={faEye}
+                                                            onClick={toggleSeePassword}
+                                                        />
+                                                    </div>
+
+                                                    {type === 'form-employee' && (
+                                                        <>
+                                                            <div className={cx('form-group', 'form-group-login')}>
+                                                                <button
+                                                                    className={cx('btn-login')}
+                                                                    onClick={handleLogin}
+                                                                >
+                                                                    Log in
+                                                                </button>
+                                                            </div>
+                                                        </>
+                                                    )}
+
+                                                    {/* {type === 'form-admin' && (
+                                                        <>
+                                                            <div className={cx('form-group', 'form-group-login')}>
+                                                                <button
+                                                                    className={cx('btn-login')}
+                                                                    onClick={handleLoginAdmin}
+                                                                >
+                                                                    Go to Dashboard
+                                                                </button>
+                                                            </div>
+                                                        </>
+                                                    )} */}
+                                                </>
+                                            )}
+
+                                            {status !== '' && (
+                                                <>
+                                                    {status === 'Authenticated Employee' && (
+                                                        <>
+                                                            <span className={cx('status-success')}>
+                                                                <span className={cx('wrap-icon-success')}>
+                                                                    <FontAwesomeIcon icon={faCheck} />
+                                                                </span>
+                                                                <span> {status}</span>
+                                                                <div
+                                                                    className={cx('go-to-dashboard')}
+                                                                    onClick={() =>
+                                                                        navigate(`/view/${empIdInput}/dashboard`)
+                                                                    }
+                                                                >
+                                                                    Go to Dashboard
+                                                                </div>
+                                                            </span>
+                                                        </>
+                                                    )}
+
+                                                    {status !== 'Authenticated Employee' && (
+                                                        <>
+                                                            <span className={cx('status')}>{status}</span>
+                                                        </>
+                                                    )}
+                                                </>
+                                            )}
                                         </div>
-                                    </PopperWrapper>
-                                </div>
-                            </>
-                        )}
-
-                        {isSendingRequest === true && <span>Sending request....</span>}
+                                        <div className={cx('video')}>
+                                            <video autoPlay muted loop playsInline className={cx('video')}>
+                                                <source
+                                                    src="https://i.etsystatic.com/site-assets/impact/impact-page/header-hero.mp4"
+                                                    type="video/mp4"
+                                                ></source>
+                                            </video>
+                                        </div>
+                                    </div>
+                                </PopperWrapper>
+                            </div>
+                        </>
                     </>
                 )}
             </div>
