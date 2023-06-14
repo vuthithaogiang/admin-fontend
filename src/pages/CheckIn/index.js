@@ -8,21 +8,37 @@ import axios from '~/api/axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import useOnClickOutside from '~/hooks/useOnClickOutside';
+import { Wrapper as PopperWrapper } from '~/components/Popper';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope, faEye, faLock } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
 function CheckIn() {
     const dayOfWeek = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
     let time = new Date().toLocaleTimeString();
+    const navigate = useNavigate();
 
     const [ctime, setCtime] = useState(time);
     const [empId, setEmpId] = useState('');
-
-    const navigate = useNavigate();
-
     const [success, setSucces] = useState(false);
+    const [modal, setModal] = useState(false);
+    const [isSendingRequest, setIsSendingRequest] = useState(false);
+    const [seePassword, setSeePassword] = useState(false);
+
+    const [type, setType] = useState('');
+
+    const toggleModal = () => {
+        setModal(!modal);
+    };
+
+    const toggleSeePassword = () => {
+        setSeePassword(!seePassword);
+    };
 
     const empIdRef = useRef();
+    const refModal = useRef();
 
     const updateTime = () => {
         time = new Date().toLocaleTimeString();
@@ -30,6 +46,14 @@ function CheckIn() {
     };
 
     setInterval(updateTime, 1000);
+
+    if (modal) {
+        document.body.classList.add('active-modal');
+    } else {
+        document.body.classList.remove('active-modal');
+    }
+
+    useOnClickOutside(refModal, toggleModal);
 
     const notifyError = () => {
         toast.error(`Emp${empId} checkin faild!`, {
@@ -91,6 +115,11 @@ function CheckIn() {
         }
     };
 
+    const handleOpenFormLogin = () => {
+        setModal(true);
+        setType('form-employee');
+    };
+
     const handleLogin = () => {
         if (success === false || empId === '') {
             notifyWarning();
@@ -150,7 +179,7 @@ function CheckIn() {
                         <span>OR</span>
                     </div>
                     <div className={cx('login')}>
-                        <button onClick={handleLogin}>Log in</button>
+                        <button onClick={handleOpenFormLogin}>Log in</button>
                     </div>
 
                     <div className={cx('login', 'admin')}>
@@ -161,6 +190,71 @@ function CheckIn() {
                 <div className={cx('right')}>
                     <img src={images.house} alt="" />
                 </div>
+
+                {modal && type === 'form-employee' && (
+                    <>
+                        {isSendingRequest === false && (
+                            <>
+                                <div className={cx('modal')}>
+                                    <div className={cx('overlay')} onClick={toggleModal}></div>
+                                    <PopperWrapper className={cx('modal-content')}>
+                                        <div className={cx('inner-content')}>
+                                            <div className={cx('form-login')}>
+                                                <div className={cx('form-header')}>
+                                                    <h3>Hello Again! Welcome back</h3>
+                                                    <p>Welcome back! Pleaase enter your details.</p>
+                                                </div>
+                                                <div className={cx('form-group')}>
+                                                    <label htmlFor="email" className={cx('form-label')}>
+                                                        {' '}
+                                                        <FontAwesomeIcon icon={faEnvelope} />
+                                                    </label>
+                                                    <input
+                                                        className={cx('form-login-input')}
+                                                        id="email"
+                                                        placeholder="Email"
+                                                        type="text"
+                                                    />
+                                                </div>
+
+                                                <div className={cx('form-group')}>
+                                                    <label htmlFor="password" className={cx('form-label')}>
+                                                        <FontAwesomeIcon icon={faLock} />
+                                                    </label>
+                                                    <input
+                                                        className={cx('form-login-input')}
+                                                        id="password"
+                                                        placeholder="Password"
+                                                        type={seePassword === false && 'password'}
+                                                    />
+                                                    <FontAwesomeIcon
+                                                        className={cx('see-password')}
+                                                        icon={faEye}
+                                                        onClick={toggleSeePassword}
+                                                    />
+                                                </div>
+
+                                                <div className={cx('form-group', 'form-group-login')}>
+                                                    <button className={cx('btn-login')}>Log In</button>
+                                                </div>
+                                            </div>
+                                            <div className={cx('video')}>
+                                                <video autoPlay muted loop playsInline className={cx('video')}>
+                                                    <source
+                                                        src="https://i.etsystatic.com/site-assets/impact/impact-page/header-hero.mp4"
+                                                        type="video/mp4"
+                                                    ></source>
+                                                </video>
+                                            </div>
+                                        </div>
+                                    </PopperWrapper>
+                                </div>
+                            </>
+                        )}
+
+                        {isSendingRequest === true && <span>Sending request....</span>}
+                    </>
+                )}
             </div>
 
             <ToastContainer
