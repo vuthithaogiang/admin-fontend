@@ -17,7 +17,7 @@ function TimesheetDetails() {
 
     const fetchDetails = async () => {
         try {
-            const response = await axios.get(`/timesheetDetails/getAllByEmpId/${params.empId}`);
+            const response = await axios.get(`/timesheetDetails/getAllByEmpId/${params.empId}/all`);
 
             console.log(response.data);
 

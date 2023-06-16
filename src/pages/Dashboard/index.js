@@ -58,8 +58,8 @@ function Dashboard() {
 
     const fetchDetails = async () => {
         try {
-            const response = await axios.get(`/timesheetDetails/getAllByEmpIdOnWeek/${params.empId}`);
-            const rechartData = await axios.get(`/timesheetDetails/getAllByEmpIdLastWeek/${params.empId}`);
+            const response = await axios.get(`/timesheetDetails/getAllByEmpId/${params.empId}/thisWeek`);
+            const rechartData = await axios.get(`/timesheetDetails/getAllByEmpId/${params.empId}/lastWeek`);
 
             if ((response.data === []) | (rechartData === [])) {
                 console.log('undefined!!');
