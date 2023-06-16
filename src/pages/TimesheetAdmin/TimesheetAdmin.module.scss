@@ -27,10 +27,16 @@
     display: flex;
     align-items: center;
     gap: 18px;
-    font-family: 'Sora', sans-serif;
+    //font-family: '', sans-serif;
     font-weight: 600;
     cursor: pointer;
     color: #717171;
+
+    span {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
 }
 .header .type span.active {
     position: relative;
@@ -143,4 +149,11 @@
 .status-absent {
     color: #a92951 !important;
     background-color: #ffe7ef;
+}
+
+.calender-wrap {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    border: 2px solid #ddd;
 }

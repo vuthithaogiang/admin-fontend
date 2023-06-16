@@ -162,7 +162,7 @@ function Dashboard() {
                                 <div className={cx('content')}>
                                     <span className={cx('title')}>Minus Late</span>
                                     <span className={cx('number')}>
-                                        {employeeInfo[0].minusLate}
+                                        {employeeInfo[employeeInfo.length - 1].minusLate}
                                         <strong>today</strong>
                                     </span>
                                 </div>

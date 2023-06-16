@@ -1,9 +1,15 @@
 import classNames from 'classnames/bind';
 import styles from './TimesheetAdmin.module.scss';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from '~/api/axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import { DateRange } from 'react-date-range';
+import format from 'date-fns/format';
+import { addDays } from 'date-fns';
 
 const cx = classNames.bind(styles);
 
@@ -13,17 +19,41 @@ function TimesheetAdmin() {
     const [type, setType] = useState('');
     const [data, setData] = useState([]);
     const [filter, setFilter] = useState('DESC');
+    const stateDefault = [
+        {
+            startDate: new Date(),
+            endDate: addDays(new Date(), 0),
+            key: 'selection',
+        },
+    ];
+
+    const [state, setState] = useState(stateDefault);
+    const [openCalender, setOpenCalender] = useState(false);
+
+    // useOnClickOutside(refCalender, setOpenCalender(false));
 
     const fetDetails = async () => {
         try {
-            const response = await axios.get(`/timesheetDetails/${typeRequest}`);
-            console.log(response.data);
-
-            if (response.data === []) {
-                console.log('no data');
+            if (typeRequest === 'getAllFromDateToOtherDate') {
+                const body = {
+                    dateFrom: format(state[0].startDate, 'yyyy-MM-dd'),
+                    dateTo: format(state[0].endDate, 'yyyy-MM-dd'),
+                };
+                const response = await axios.post(`/timesheetDetails/${typeRequest}`, body);
+                if (response.data === []) {
+                    console.log('no data');
+                } else {
+                    setData(response.data);
+                    setIsLoading(false);
+                }
             } else {
-                setData(response.data);
-                setIsLoading(false);
+                const response = await axios.get(`/timesheetDetails/${typeRequest}`);
+                if (response.data === []) {
+                    console.log('no data');
+                } else {
+                    setData(response.data);
+                    setIsLoading(false);
+                }
             }
         } catch (error) {
             console.log('failed!');
@@ -32,7 +62,7 @@ function TimesheetAdmin() {
 
     useEffect(() => {
         fetDetails();
-    }, [typeRequest]);
+    }, [typeRequest, state]);
 
     const sorting = (col) => {
         setType(col);
@@ -59,6 +89,30 @@ function TimesheetAdmin() {
                     <div className={cx('header')}>
                         <h4>Timesheet Details</h4>
                         <div className={cx('type')}>
+                            <span
+                                onClick={() => {
+                                    setTypeRequest('getAllFromDateToOtherDate');
+                                    setOpenCalender((openCalender) => !openCalender);
+                                }}
+                                className={typeRequest === 'getAllFromDateToOtherDate' ? cx('active') : cx('')}
+                            >
+                                <FontAwesomeIcon icon={faCalendar} />
+                                Due Date
+                            </span>
+                            {openCalender && (
+                                <>
+                                    <div className={cx('calender-wrap')}>
+                                        <DateRange
+                                            onChange={(item) => setState([item.selection])}
+                                            showSelectionPreview={true}
+                                            moveRangeOnFirstSelection={false}
+                                            months={1}
+                                            ranges={state}
+                                            direction="horizontal"
+                                        />
+                                    </div>
+                                </>
+                            )}
                             <span
                                 onClick={() => setTypeRequest('getAllToday')}
                                 className={typeRequest === 'getAllToday' ? cx('active') : cx('')}
