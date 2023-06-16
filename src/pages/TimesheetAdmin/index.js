@@ -15,7 +15,8 @@ const cx = classNames.bind(styles);
 
 function TimesheetAdmin() {
     const [isLoading, setIsLoading] = useState(true);
-    const [typeRequest, setTypeRequest] = useState('getAllThisWeek');
+    const [typeRequest, setTypeRequest] = useState('today');
+    const [root, setRoot] = useState('getAll');
     const [type, setType] = useState('');
     const [data, setData] = useState([]);
     const [filter, setFilter] = useState('DESC');
@@ -34,12 +35,12 @@ function TimesheetAdmin() {
 
     const fetDetails = async () => {
         try {
-            if (typeRequest === 'getAllFromDateToOtherDate') {
+            if (typeRequest === 'dueDate') {
                 const body = {
                     dateFrom: format(state[0].startDate, 'yyyy-MM-dd'),
                     dateTo: format(state[0].endDate, 'yyyy-MM-dd'),
                 };
-                const response = await axios.post(`/timesheetDetails/${typeRequest}`, body);
+                const response = await axios.post(`/timesheetDetails/${root}/${typeRequest}`, body);
                 if (response.data === []) {
                     console.log('no data');
                 } else {
@@ -47,7 +48,7 @@ function TimesheetAdmin() {
                     setIsLoading(false);
                 }
             } else {
-                const response = await axios.get(`/timesheetDetails/${typeRequest}`);
+                const response = await axios.get(`/timesheetDetails/${root}/${typeRequest}`);
                 if (response.data === []) {
                     console.log('no data');
                 } else {
@@ -62,7 +63,7 @@ function TimesheetAdmin() {
 
     useEffect(() => {
         fetDetails();
-    }, [typeRequest, state]);
+    }, [typeRequest, state, root]);
 
     const sorting = (col) => {
         setType(col);
@@ -87,14 +88,21 @@ function TimesheetAdmin() {
             {isLoading === false && (
                 <div className={cx('wrapper')}>
                     <div className={cx('header')}>
-                        <h4>Timesheet Details</h4>
+                        <h4
+                            onClick={() => {
+                                setRoot('getAll');
+                                setTypeRequest('today');
+                            }}
+                        >
+                            Timesheet Details
+                        </h4>
                         <div className={cx('type')}>
                             <span
                                 onClick={() => {
-                                    setTypeRequest('getAllFromDateToOtherDate');
+                                    setTypeRequest('dueDate');
                                     setOpenCalender((openCalender) => !openCalender);
                                 }}
-                                className={typeRequest === 'getAllFromDateToOtherDate' ? cx('active') : cx('')}
+                                className={typeRequest === 'dueDate' ? cx('active') : cx('')}
                             >
                                 <FontAwesomeIcon icon={faCalendar} />
                                 Due Date
@@ -114,32 +122,32 @@ function TimesheetAdmin() {
                                 </>
                             )}
                             <span
-                                onClick={() => setTypeRequest('getAllToday')}
-                                className={typeRequest === 'getAllToday' ? cx('active') : cx('')}
+                                onClick={() => setTypeRequest('today')}
+                                className={typeRequest === 'today' ? cx('active') : cx('')}
                             >
                                 Today
                             </span>
                             <span
-                                onClick={() => setTypeRequest('getAllThisWeek')}
-                                className={typeRequest === 'getAllThisWeek' ? cx('active') : cx('')}
+                                onClick={() => setTypeRequest('thisWeek')}
+                                className={typeRequest === 'thisWeek' ? cx('active') : cx('')}
                             >
                                 This week
                             </span>
                             <span
-                                onClick={() => setTypeRequest('getAllLastWeek')}
-                                className={typeRequest === 'getAllLastWeek' ? cx('active') : cx('')}
+                                onClick={() => setTypeRequest('lastWeek')}
+                                className={typeRequest === 'lastWeek' ? cx('active') : cx('')}
                             >
                                 Last week
                             </span>
                             <span
-                                onClick={() => setTypeRequest('getAllThisMonth')}
-                                className={typeRequest === 'getAllThisMonth' ? cx('active') : cx('')}
+                                onClick={() => setTypeRequest('thisMonth')}
+                                className={typeRequest === 'thisMonth' ? cx('active') : cx('')}
                             >
                                 This Month
                             </span>
                             <span
-                                onClick={() => setTypeRequest('getAll')}
-                                className={typeRequest === 'getAll' ? cx('active') : cx('')}
+                                onClick={() => setTypeRequest('all')}
+                                className={typeRequest === 'all' ? cx('active') : cx('')}
                             >
                                 View All
                             </span>
@@ -221,7 +229,11 @@ function TimesheetAdmin() {
                     </div>
 
                     {data.map((item) => (
-                        <div className={cx('item')} key={item.id}>
+                        <div
+                            className={cx('item')}
+                            key={item.id}
+                            onClick={() => setRoot(`getAllByEmpId/${item.empId}`)}
+                        >
                             <div className={cx('thumbnail')}>
                                 <img src={item.avatar} alt="avatar" />
                             </div>
