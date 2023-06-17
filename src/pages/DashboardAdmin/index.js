@@ -106,9 +106,9 @@ function DashboardAdmin() {
                                         <span>{item.dateToString}</span>
                                         <span className={cx('time')}>{item.timeToString}</span>
                                         <span>
-                                            {item.avatar === null ? (
+                                            {(item.avatar === null) | (item.avatar === '') ? (
                                                 <>
-                                                    <AvatarDefault firstName={item.firstName} />{' '}
+                                                    <AvatarDefault firstName={item.firstName} color={'#3d81c2'} />{' '}
                                                 </>
                                             ) : (
                                                 <img className={cx('log-avatar')} src={item.avatar} />

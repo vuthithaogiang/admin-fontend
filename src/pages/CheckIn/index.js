@@ -64,8 +64,8 @@ function CheckIn() {
 
     useOnClickOutside(refModal, toggleModal);
 
-    const notifyError = () => {
-        toast.error(`Emp${empId} checkin faild!`, {
+    const notifyError = (typeCheck) => {
+        toast.error(`Emp${empId} ${typeCheck} faild!`, {
             position: 'top-right',
             autoClose: 5000,
             hideProgressBar: false,
@@ -77,8 +77,8 @@ function CheckIn() {
         });
     };
 
-    const notifySuccess = () => {
-        toast.success(`Emp${empId} checkin success!`, {
+    const notifySuccess = (typeCheck) => {
+        toast.success(`Emp${empId} ${typeCheck} success!`, {
             position: 'top-right',
             autoClose: 5000,
             hideProgressBar: false,
@@ -91,7 +91,7 @@ function CheckIn() {
     };
 
     const notifyWarning = () => {
-        toast.warn('🦄 Please check in first!', {
+        toast.warn(`🦄 Please try again!`, {
             position: 'top-right',
             autoClose: 5000,
             hideProgressBar: false,
@@ -116,7 +116,12 @@ function CheckIn() {
                     notifyError();
                 } else {
                     setSucces(true);
-                    notifySuccess();
+
+                    if (response.data.timeOut !== null) {
+                        notifySuccess('check out');
+                    } else {
+                        notifySuccess('check in');
+                    }
                 }
             } catch (error) {
                 if (error.response?.status === 500 || error.response?.status === 400) {

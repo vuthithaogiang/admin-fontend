@@ -27,7 +27,7 @@ function TimesheetComponent({ item, onClick }) {
                 placement="bottom-start"
             >
                 <div className={cx('thumbnail')}>
-                    {item.avatar === null ? (
+                    {(item.avatar === null) | (item.avatar === '') ? (
                         <AvatarDefault firstName={item.firstName} color={'#3d81c2'} />
                     ) : (
                         <img src={item.avatar} alt="avatar" />
