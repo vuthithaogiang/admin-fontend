@@ -9,6 +9,7 @@ import { useParams } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router';
+import TimesheetComponent from '~/components/TimesheetComponent';
 
 const cx = classNames.bind(styles);
 
@@ -303,20 +304,7 @@ function Dashboard() {
                             </div>
 
                             {employeeInfo.map((item) => (
-                                <div className={cx('item')} key={item.id}>
-                                    <div className={cx('thumb-nail')}>
-                                        <img src={item.avatar} alt="avatar" className={cx('avatar')} />
-                                    </div>
-
-                                    <span>{item.dateIn}</span>
-                                    {item.timeIn === null ? <span>_</span> : <span>{item.timeInString}</span>}
-                                    {item.timeOut === null ? <span>_</span> : <span>{item.timeOutString}</span>}
-                                    <span>{item.minusLate}</span>
-                                    {item.totalWork === null ? <span>_</span> : <span>{item.totalWork}</span>}
-                                    {item.status === 1 && <span className={cx('status-present')}>Present</span>}
-                                    {item.status === 0 && <span className={cx('status-absent')}>Absent</span>}
-                                    <span>{item.position}</span>
-                                </div>
+                                <TimesheetComponent item={item} key={item.id} />
                             ))}
 
                             <div className={cx('view-all')}>

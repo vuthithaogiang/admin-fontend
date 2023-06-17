@@ -1,0 +1,15 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    // background-color: #3d81c2;
+    border-radius: 50%;
+
+    span {
+        font-size: 1.5rem;
+        color: #fff !important;
+        font-weight: 500;
+    }
+}

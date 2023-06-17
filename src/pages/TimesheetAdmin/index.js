@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './TimesheetAdmin.module.scss';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from '~/api/axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +10,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRange } from 'react-date-range';
 import format from 'date-fns/format';
 import { addDays } from 'date-fns';
+import TimesheetComponent from '~/components/TimesheetComponent';
 
 const cx = classNames.bind(styles);
 
@@ -229,37 +230,11 @@ function TimesheetAdmin() {
                     </div>
 
                     {data.map((item) => (
-                        <div
-                            className={cx('item')}
+                        <TimesheetComponent
+                            item={item}
                             key={item.id}
                             onClick={() => setRoot(`getAllByEmpId/${item.empId}`)}
-                        >
-                            <div className={cx('thumbnail')}>
-                                <img src={item.avatar} alt="avatar" />
-                            </div>
-
-                            <span className={cx('date')}>
-                                <span className={cx('day-off-week')}>{item.dayOfWeek.substr(0, 3)}</span> {item.dateIn}
-                            </span>
-                            {item.timeIn === null ? (
-                                <span>_</span>
-                            ) : (
-                                <span className={cx('time-in')}>🔥 {item.timeInString}</span>
-                            )}
-                            {item.timeOut == null ? (
-                                <span>_</span>
-                            ) : (
-                                <span className={cx('time-out')}>🚀 {item.timeOutString}</span>
-                            )}
-                            <span>{item.minusLate}</span>
-                            {item.totalWork === null ? <span>_</span> : <span>{item.totalWork}</span>}
-                            {item.status === 1 ? (
-                                <span className={cx('status-present')}>Present</span>
-                            ) : (
-                                <span className={cx('status-absent')}>Absent</span>
-                            )}
-                            <span>{item.position}</span>
-                        </div>
+                        />
                     ))}
                 </div>
             )}

@@ -5,6 +5,7 @@ import { useParams } from 'react-router';
 import axios from '~/api/axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+import TimesheetComponent from '~/components/TimesheetComponent';
 
 const cx = classNames.bind(styles);
 
@@ -119,34 +120,7 @@ function TimesheetDetails() {
                             <span className={cx('item-sort')}>Position</span>
                         </div>
                         {listEmployee.map((item) => (
-                            <div className={cx('item')} key={item.id}>
-                                <div className={cx('thumbnail')}>
-                                    <img src={item.avatar} alt="avatar" />
-                                </div>
-
-                                <span className={cx('date')}>
-                                    <span className={cx('day-off-week')}>{item.dayOfWeek.substr(0, 3)}</span>{' '}
-                                    {item.dateIn}
-                                </span>
-                                {item.timeIn === null ? (
-                                    <span>_</span>
-                                ) : (
-                                    <span className={cx('time-in')}>🔥 {item.timeInString}</span>
-                                )}
-                                {item.timeOut == null ? (
-                                    <span>_</span>
-                                ) : (
-                                    <span className={cx('time-out')}>🚀 {item.timeOutString}</span>
-                                )}
-                                <span>{item.minusLate}</span>
-                                {item.totalWork === null ? <span>_</span> : <span>{item.totalWork}</span>}
-                                {item.status === 1 ? (
-                                    <span className={cx('status-present')}>Present</span>
-                                ) : (
-                                    <span className={cx('status-absent')}>Absent</span>
-                                )}
-                                <span>{item.position}</span>
-                            </div>
+                            <TimesheetComponent item={item} key={item.id} />
                         ))}
                     </div>
                 </>

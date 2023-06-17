@@ -4,6 +4,7 @@ import images from '~/assets/images';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from '~/api/axios';
+import AvatarDefault from '~/components/AvatarDefault';
 
 const cx = classNames.bind(styles);
 
@@ -105,7 +106,13 @@ function DashboardAdmin() {
                                         <span>{item.dateToString}</span>
                                         <span className={cx('time')}>{item.timeToString}</span>
                                         <span>
-                                            <img className={cx('log-avatar')} src={item.avatar} />
+                                            {item.avatar === null ? (
+                                                <>
+                                                    <AvatarDefault firstName={item.firstName} />{' '}
+                                                </>
+                                            ) : (
+                                                <img className={cx('log-avatar')} src={item.avatar} />
+                                            )}
                                         </span>
                                         <span className={cx('full-name')}>
                                             <strong>{item.fullNameEmp}</strong> is{' '}

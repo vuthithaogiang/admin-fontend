@@ -220,9 +220,10 @@
 .timesheet-filter {
     flex: 1;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 84px repeat(7, 1fr);
     align-items: center;
-    padding: 12px;
+    // padding: 12px;
+    gap: 12px;
 }
 
 .timesheet-filter .item-sort {
@@ -240,43 +241,6 @@
 
 .icon-up {
     margin-bottom: -8px;
-}
-
-.recent-checkin .item {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    align-items: center;
-    padding: 12px;
-    gap: 12px;
-    cursor: pointer;
-    border: 1px solid #ddd;
-
-    span {
-        font-size: 1.5rem;
-        line-height: 24px;
-
-        color: #010101;
-    }
-}
-
-.thumb-nail {
-    width: 36px;
-    height: 36px;
-
-    cursor: pointer;
-    border-radius: 50%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.thumb-nail .avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-
-    object-fit: cover;
 }
 
 .view-all {
@@ -301,21 +265,4 @@
     line-height: 1.5;
     background-color: transparent;
     cursor: pointer;
-}
-
-.status-absent,
-.status-present {
-    width: fit-content;
-    padding: 5px 8px;
-    border-radius: 4px;
-    font-size: 1.4rem !important;
-}
-
-.status-present {
-    color: #87d6b5 !important;
-    background-color: #ecfbf4;
-}
-.status-absent {
-    color: #a92951 !important;
-    background-color: #ffe7ef;
 }
