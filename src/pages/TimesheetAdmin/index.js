@@ -1,17 +1,28 @@
 import classNames from 'classnames/bind';
 import styles from './TimesheetAdmin.module.scss';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from '~/api/axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRange } from 'react-date-range';
 import format from 'date-fns/format';
 import { addDays } from 'date-fns';
-import TimesheetComponent from '~/components/TimesheetComponent';
 import { useNavigate } from 'react-router';
+import { Wrapper as PopperWrapper } from '~/components/Popper';
+import AvatarDefault from '~/components/AvatarDefault';
+import Tippy from '@tippyjs/react/headless';
+import useOnClickOutside from '~/hooks/useOnClickOutside';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+import dayjs from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 const cx = classNames.bind(styles);
 
 function TimesheetAdmin() {
@@ -22,6 +33,14 @@ function TimesheetAdmin() {
     const [type, setType] = useState('');
     const [data, setData] = useState([]);
     const [filter, setFilter] = useState('DESC');
+    const [modal, setModal] = useState(false);
+    const [typeHandle, setTypeHandle] = useState('');
+    const [timesheetIdDelete, setTimesheetIdDelete] = useState(null);
+    const [timesheetEdit, setTimesheetEdit] = useState({});
+    const refModal = useRef();
+    const [timeInValue, setTimeInValue] = useState(null);
+    const [timeOutValue, setTimeOutValue] = useState(null);
+
     const stateDefault = [
         {
             startDate: new Date(),
@@ -33,7 +52,78 @@ function TimesheetAdmin() {
     const [state, setState] = useState(stateDefault);
     const [openCalender, setOpenCalender] = useState(false);
 
-    // useOnClickOutside(refCalender, setOpenCalender(false));
+    const toggleModal = () => {
+        setModal(!modal);
+    };
+    if (modal) {
+        document.body.classList.add('active-modal');
+    } else {
+        document.body.classList.remove('active-modal');
+    }
+    useOnClickOutside(refModal, toggleModal);
+
+    const handleOpenModalDelete = (timesheetId) => {
+        if (timesheetId) {
+            setTypeHandle('delete');
+            setTimesheetIdDelete(timesheetId);
+            setModal(true);
+        }
+    };
+
+    const handleOpenModalFormEdit = (item) => {
+        if (item) {
+            setTypeHandle('edit');
+            setTimesheetEdit(item);
+            setModal(true);
+        }
+    };
+
+    const handleDelete = async (timesheetId) => {
+        console.log(timesheetId);
+
+        try {
+            const response = await axios.post(`/timesheet/saveToTrash/${timesheetId}`);
+
+            if (response.data === 'undefined') {
+                notifyError();
+            } else {
+                notifySuccess();
+                // window.location.reload(false);
+            }
+        } catch (error) {
+            notifyError();
+        }
+    };
+
+    const handleEdit = async (timesheet) => {
+        if (timeInValue === null || timeOutValue === null) {
+            notifyError();
+        } else {
+            var timeInString = `${timeInValue.$H}:${timeInValue.$m}:${timeInValue.$s}`;
+            var timeOutString = `${timeOutValue.$H}:${timeOutValue.$m}:${timeOutValue.$s}`;
+            console.log(timeInString);
+            console.log(timeOutString);
+
+            var formData = {
+                timesheetId: timesheet.timesheetId,
+                timeIn: `${timesheet.dateIn} ${timeInString}`,
+                timeOut: `${timesheet.dateIn} ${timeOutString}`,
+            };
+
+            try {
+                const response = await axios.put(`/timesheet/edit`, formData);
+
+                if (response.data === 'undefined') {
+                    notifyError();
+                } else {
+                    notifySuccess();
+                    // window.location.reload(true);
+                }
+            } catch (error) {
+                notifyError();
+            }
+        }
+    };
 
     const fetDetails = async () => {
         try {
@@ -82,6 +172,32 @@ function TimesheetAdmin() {
 
             setFilter('DESC');
         }
+    };
+
+    const notifyError = () => {
+        toast.error(`Send request failed! 🎉`, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
+    };
+
+    const notifySuccess = () => {
+        toast.success(`Send request successfully! 🎉`, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
     };
 
     return (
@@ -236,15 +352,166 @@ function TimesheetAdmin() {
                     </div>
 
                     {data.map((item) => (
-                        <TimesheetComponent
-                            item={item}
-                            key={item.id}
-                            onClick={() => setRoot(`getAllByEmpId/${item.empId}`)}
-                            actions={true}
-                        />
+                        <div className={cx('wrapper-item')} key={item.timesheetId}>
+                            <Tippy
+                                interactive
+                                render={(attrs) => (
+                                    <div className={cx('full-name')} tabIndex={'-1'} {...attrs}>
+                                        <PopperWrapper>
+                                            <p>{item.fullNameEmp}</p>
+                                        </PopperWrapper>
+                                    </div>
+                                )}
+                                placement="bottom-start"
+                            >
+                                <div className={cx('thumbnail')} onClick={() => setRoot(`getAllByEmpId/${item.empId}`)}>
+                                    {(item.avatar === null) | (item.avatar === '') ? (
+                                        <AvatarDefault firstName={item.firstName} color={'#3d81c2'} />
+                                    ) : (
+                                        <img src={item.avatar} alt="avatar" />
+                                    )}
+                                </div>
+                            </Tippy>
+
+                            <span className={cx('date')}>
+                                <span className={cx('day-off-week')}>{item.dayOfWeek.substr(0, 3)}</span>{' '}
+                                {item.dayOfMonth} {item.monthInString}
+                            </span>
+
+                            <span className={cx('time-in')}>
+                                {item.timeIn === null ? <>_</> : <>🎉{item.timeInString}</>}
+                            </span>
+
+                            <span className={cx('time-out')}>
+                                {item.timeOut === null ? <>_</> : <>🚀{item.timeOutString}</>}
+                            </span>
+
+                            <span>{item.minusLate}</span>
+                            {item.totalWork === null ? <span>_</span> : <span>{item.totalWork}</span>}
+                            {item.status === 1 ? (
+                                <span className={cx('status-present')}>Present</span>
+                            ) : (
+                                <span className={cx('status-absent')}>Absent</span>
+                            )}
+                            <span className={cx('wrap-actions')}>
+                                {item.position}
+
+                                <span className={cx('actions')}>
+                                    <span onClick={() => handleOpenModalFormEdit(item)}>
+                                        {' '}
+                                        <FontAwesomeIcon icon={faPen} />
+                                    </span>
+                                    <span onClick={() => handleOpenModalDelete(item.timesheetId)}>
+                                        {' '}
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </span>
+                                </span>
+                            </span>
+                        </div>
                     ))}
+
+                    {modal && typeHandle === 'delete' && timesheetIdDelete !== null && (
+                        <>
+                            <div className={cx('modal')}>
+                                <div className={cx('overlay')} onClick={toggleModal}></div>
+                                <div className={cx('modal-content')}>
+                                    <PopperWrapper>
+                                        <div className={cx('modal-btns-action')}>
+                                            <p>Are you sure want to delete that timesheet?</p>
+                                            <div>
+                                                <button
+                                                    className={cx('yes')}
+                                                    onClick={() => handleDelete(timesheetIdDelete)}
+                                                >
+                                                    Yes
+                                                </button>
+                                                <button onClick={toggleModal}>No</button>
+                                            </div>
+                                        </div>
+                                    </PopperWrapper>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                    {modal && typeHandle === 'edit' && timesheetEdit !== {} && (
+                        <>
+                            <div className={cx('modal')}>
+                                <div className={cx('overlay')} onClick={toggleModal}></div>
+                                <div className={cx('modal-content')}>
+                                    <PopperWrapper>
+                                        <div className={cx('modal-header')}>
+                                            <span className={cx('full-name-emp')}>{timesheetEdit.fullNameEmp}</span>
+                                            <span>
+                                                is present in{' '}
+                                                <span className={cx('datein')}>
+                                                    {timesheetEdit.dayOfWeek} {timesheetEdit.dayOfMonth}{' '}
+                                                    {timesheetEdit.monthInString}
+                                                </span>
+                                                . Check in:
+                                                <span className={cx('checkin')}>{timesheetEdit.timeInString}</span> &
+                                                Check out:
+                                                <span className={cx('checkout')}>
+                                                    {timesheetEdit.timeOut === null && <> _ </>}{' '}
+                                                    {timesheetEdit.timeOutString}
+                                                </span>
+                                                with total misnus late: {timesheetEdit.minusLate}
+                                            </span>
+                                        </div>
+                                        <div className={cx('modal-form')}>
+                                            <div className={cx('group-item')}>
+                                                <span className={cx('label')}>Time in</span>
+                                                <div className={cx('value')}>
+                                                    <LocalizationProvider dateAdapter={AdapterDayjs} style={{}}>
+                                                        <TimePicker
+                                                            label="Basic time picker"
+                                                            value={timeInValue}
+                                                            onChange={(value) => setTimeInValue(value)}
+                                                        />
+                                                    </LocalizationProvider>
+                                                </div>
+                                            </div>
+                                            <div className={cx('group-item')}>
+                                                <span className={cx('label')}>Time out</span>
+                                                <div className={cx('value')}>
+                                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                        <TimePicker
+                                                            label="Basic time picker"
+                                                            value={timeOutValue}
+                                                            onChange={(value) => setTimeOutValue(value)}
+                                                        />
+                                                    </LocalizationProvider>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className={cx('modal-btns-action')}>
+                                            <p>Are you sure want to change that timesheet?</p>
+                                            <div>
+                                                <button className={cx('yes')} onClick={() => handleEdit(timesheetEdit)}>
+                                                    Yes
+                                                </button>
+                                                <button onClick={toggleModal}>No</button>
+                                            </div>
+                                        </div>
+                                    </PopperWrapper>
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
             )}
+
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            ></ToastContainer>
         </>
     );
 }

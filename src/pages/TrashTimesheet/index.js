@@ -5,8 +5,9 @@ import axios from '~/api/axios';
 import AvatarDefault from '~/components/AvatarDefault';
 import Tippy from '@tippyjs/react/headless';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+
 import { useNavigate } from 'react-router';
 
 const cx = classNames.bind(styles);
@@ -31,9 +32,50 @@ function TrashTimesheet() {
         }
     };
 
+    const handleRestore = async (timesheetId) => {
+        try {
+            const response = await axios.post(`/timesheet/restoreFromTrash/${timesheetId}`);
+
+            if (response.data === 'undefined') {
+                notifyError();
+            } else {
+                notifySuccess();
+                window.location.reload(false);
+            }
+        } catch (error) {
+            notifyError();
+        }
+    };
+
     useEffect(() => {
         fetDetails();
     }, []);
+
+    const notifyError = () => {
+        toast.error(`Send request failed! 🎉`, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
+    };
+
+    const notifySuccess = () => {
+        toast.success(`Send request successfully! 🎉`, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
+    };
     return (
         <>
             {isLoading ? (
@@ -90,13 +132,13 @@ function TrashTimesheet() {
                                 ) : (
                                     <span className={cx('time-in')}>🔥 {item.timeIn.substr(11)}</span>
                                 )}
-                                {item.timeOut == null ? (
+                                {item.timeOut === null ? (
                                     <span>_</span>
                                 ) : (
                                     <span className={cx('time-out')}>🚀 {item.timeOut.substr(11)}</span>
                                 )}
                                 <span>{item.minusLate}</span>
-                                {item.totalWork === null ? <span>_</span> : <span>{item.toTalHourWork}</span>}
+                                {item.toTalHourWork === null ? <span>_</span> : <span>{item.toTalHourWork}</span>}
                                 {item.status === 1 ? (
                                     <span className={cx('status-present')}>Present</span>
                                 ) : (
@@ -106,7 +148,9 @@ function TrashTimesheet() {
                                     {item.employee.position}
 
                                     <span className={cx('actions')}>
-                                        <span className={cx('restore')}>Restore</span>
+                                        <span className={cx('restore')} onClick={() => handleRestore(item.timesheetId)}>
+                                            Restore
+                                        </span>
                                         <span className={cx('delete')}>Delete</span>
                                     </span>
                                 </span>
@@ -115,6 +159,19 @@ function TrashTimesheet() {
                     </div>
                 </>
             )}
+
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            ></ToastContainer>
         </>
     );
 }

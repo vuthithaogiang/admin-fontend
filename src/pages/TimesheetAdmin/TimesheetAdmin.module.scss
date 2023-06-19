@@ -57,18 +57,13 @@
     }
 }
 
-.timesheet-filter,
-.item {
+.timesheet-filter {
     display: grid;
     grid-template-columns: 84px 1fr 1fr 1fr 84px 120px 84px 1fr;
 
     align-items: center;
     justify-content: center;
     gap: 12px;
-}
-
-.item {
-    cursor: pointer;
 }
 
 .timesheet-filter {
@@ -96,8 +91,35 @@
     font-size: 1.4rem;
     cursor: pointer;
 }
-.item {
-    border: 1px solid #ddd;
+
+.calender-wrap {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    border: 2px solid #ddd;
+}
+
+.go-to-trash {
+    font-size: 1.3rem;
+    text-decoration: underline;
+    cursor: pointer;
+    color: #3d81c2;
+}
+
+.wrapper-item {
+    display: grid;
+    grid-template-columns: 84px 1fr 1fr 1fr 84px 120px 84px 1fr;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    gap: 12px;
+    border-radius: 8px;
+}
+
+.wrapper-item + .wrapper-item {
+    margin-top: 4px;
+}
+.wrapper-item {
     padding: 12px 0;
 
     span {
@@ -107,11 +129,11 @@
     }
 }
 
-.item .time-in {
+.time-in {
     color: #88ae32;
 }
 
-.item .time-out {
+.time-out {
     color: #3d81c2;
 }
 
@@ -122,11 +144,11 @@
     gap: 6px;
 }
 
-.item .day-off-week {
-    background-color: #90ccff;
+.day-off-week {
+    background-color: rgba(1, 102, 255, 0.1);
     width: 50px;
     padding: 3px 0;
-    color: #656689;
+    color: #0166ff !important;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -162,16 +184,154 @@
     background-color: #ffe7ef;
 }
 
-.calender-wrap {
-    position: absolute;
-    top: 60px;
-    left: 50%;
-    border: 2px solid #ddd;
+.full-name p {
+    padding: 6px 12px;
+    color: #6c6c6c;
 }
 
-.go-to-trash {
-    font-size: 1.3rem;
-    text-decoration: underline;
+.wrap-actions {
+    display: flex;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+
+    gap: 3px;
+    margin-left: auto;
+    padding-right: 16px;
+}
+
+.actions span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // border: 1px solid #ddd;
+    background-color: #f7f6f9;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
     cursor: pointer;
-    color: #3d81c2;
+}
+
+.actions svg {
+    font-size: 1.3rem;
+    color: #a7a8ab;
+}
+
+//Modal
+body.active-modal {
+    overflow-y: hidden;
+}
+
+.modal,
+.overlay {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+    z-index: 7;
+}
+
+.overlay {
+    background: rgba(49, 49, 49, 0.8);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.modal-btns-action {
+    padding-top: 12px;
+    padding-bottom: 20px;
+
+    p {
+        padding: 16px;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 2.3rem;
+        line-height: 1;
+
+        color: #48496a;
+    }
+}
+
+.modal-btns-action div {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 20px 20px 0 20px;
+
+    button {
+        flex: 1;
+        padding: 12px 0;
+        cursor: pointer;
+        font-size: 1.8rem;
+        font-weight: 600;
+        border-radius: 4px;
+    }
+
+    button.yes {
+        background-color: #0166ff;
+        color: #fff;
+    }
+}
+
+.modal-header {
+    padding: 12px;
+    border-bottom: 2px solid #ddd;
+    display: flex;
+    flex-direction: column;
+
+    .full-name-emp {
+        font-size: 3.2rem;
+        font-weight: 600;
+    }
+
+    .datein {
+        background-color: #ffe7ef;
+        padding: 4px;
+        border-radius: 4px;
+    }
+
+    span {
+        font-size: 1.5rem;
+        color: #6c6c6c;
+    }
+}
+
+.modal-form {
+    padding: 20px;
+    .group-item {
+        display: flex;
+        flex-direction: column;
+        row-gap: 8px;
+
+        + .group-item {
+            margin-top: 12px;
+        }
+
+        .value input {
+            font-size: 1.6rem !important;
+        }
+
+        .value label {
+            font-size: 1.6rem !important;
+        }
+
+        .value svg {
+            font-size: 2rem !important;
+        }
+
+        .value span {
+            font-size: 1.4rem !important;
+        }
+    }
 }

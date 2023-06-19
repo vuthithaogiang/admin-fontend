@@ -45,7 +45,6 @@ function TimeOffAdmin() {
     const [itemUpdate, setItemUpdate] = useState({});
 
     const [isSendingRequest, setIsSendingRequest] = useState(false);
-    //const [sendSuccess, setSendSuccess] = useState(false);
 
     const stateDefault = [
         {
@@ -742,7 +741,7 @@ function TimeOffAdmin() {
                                                         </div>
 
                                                         <div className={cx('btns-action')}>
-                                                            <p>Are you sure want to delete that request?</p>
+                                                            <p>Are you sure want to delete that timesheet?</p>
                                                             <div>
                                                                 <button
                                                                     className={cx('yes')}
