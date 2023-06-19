@@ -137,6 +137,7 @@ function Home() {
 
     useEffect(() => {
         fetchDetails();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params.empId]);
     return (
         <div className={cx('wrapper')}>
