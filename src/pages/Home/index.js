@@ -149,7 +149,7 @@ function Home() {
                     </div>
 
                     <div className={cx('content')}>
-                        <Header avatar={employeeInfo[0].avatar} />
+                        <Header avatar={employeeInfo[0].avatar} firstName={employeeInfo[0].firstName} />
 
                         {params.children === 'dashboard' && <Dashboard />}
 
@@ -159,7 +159,7 @@ function Home() {
 
                         {params.children === 'furloughAdd' && <AddFurlough />}
 
-                        {params.children === 'furlough' && <HistoryFurloughs />}
+                        {params.children === 'furlough' && <HistoryFurloughs firstName={employeeInfo[0].firstName} />}
                     </div>
                 </>
             )}

@@ -7,10 +7,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar, faCheck, faClock, faFile, faFire, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react/headless';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
+import AvatarDefault from '../AvatarDefault';
 
 const cx = classNames.bind(styles);
 
-function HistoryFurloughs() {
+function HistoryFurloughs({ firstName }) {
     const [isLoading, setIsLoading] = useState(true);
     const params = useParams();
     const [data, setData] = useState([]);
@@ -74,7 +75,16 @@ function HistoryFurloughs() {
                                 {/* 1 */}
                                 <div className={cx('item')} key={item.furloughId}>
                                     <span className={cx('avatar')}>
-                                        <img src={item.avatar} alt="avatar" />
+                                        {item.avatar ? (
+                                            <>
+                                                {' '}
+                                                <img src={item.avatar} alt="avatar" />
+                                            </>
+                                        ) : (
+                                            <>
+                                                <AvatarDefault firstName={firstName} color={'#3d81c2'} />
+                                            </>
+                                        )}
                                     </span>
                                 </div>
 

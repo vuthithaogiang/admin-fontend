@@ -11,10 +11,11 @@ import { DateRange } from 'react-date-range';
 import format from 'date-fns/format';
 import { addDays } from 'date-fns';
 import TimesheetComponent from '~/components/TimesheetComponent';
-
+import { useNavigate } from 'react-router';
 const cx = classNames.bind(styles);
 
 function TimesheetAdmin() {
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [typeRequest, setTypeRequest] = useState('today');
     const [root, setRoot] = useState('getAll');
@@ -89,14 +90,19 @@ function TimesheetAdmin() {
             {isLoading === false && (
                 <div className={cx('wrapper')}>
                     <div className={cx('header')}>
-                        <h4
-                            onClick={() => {
-                                setRoot('getAll');
-                                setTypeRequest('today');
-                            }}
-                        >
-                            Timesheet Details
-                        </h4>
+                        <div>
+                            <h4
+                                onClick={() => {
+                                    setRoot('getAll');
+                                    setTypeRequest('today');
+                                }}
+                            >
+                                Timesheet Details
+                            </h4>
+                            <span className={cx('go-to-trash')} onClick={() => navigate('/admin/trash')}>
+                                Go to Trash{' '}
+                            </span>
+                        </div>
                         <div className={cx('type')}>
                             <span
                                 onClick={() => {
@@ -140,12 +146,12 @@ function TimesheetAdmin() {
                             >
                                 Last week
                             </span>
-                            <span
+                            {/* <span
                                 onClick={() => setTypeRequest('thisMonth')}
                                 className={typeRequest === 'thisMonth' ? cx('active') : cx('')}
                             >
                                 This Month
-                            </span>
+                            </span> */}
                             <span
                                 onClick={() => setTypeRequest('all')}
                                 className={typeRequest === 'all' ? cx('active') : cx('')}
@@ -234,6 +240,7 @@ function TimesheetAdmin() {
                             item={item}
                             key={item.id}
                             onClick={() => setRoot(`getAllByEmpId/${item.empId}`)}
+                            actions={true}
                         />
                     ))}
                 </div>

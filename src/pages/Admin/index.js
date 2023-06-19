@@ -1,10 +1,10 @@
 import classNames from 'classnames/bind';
 import styles from './Admin.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faClock, faFile } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faClock, faFile, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { faCode, faCouch, faGear, faPencil } from '@fortawesome/free-solid-svg-icons';
-import { faClipboard, faComment, faIdBadge } from '@fortawesome/free-regular-svg-icons';
+import { faClipboard, faComment } from '@fortawesome/free-regular-svg-icons';
 import { faCodepen, faTeamspeak } from '@fortawesome/free-brands-svg-icons';
 
 import { useParams } from 'react-router';
@@ -12,6 +12,7 @@ import DashboardAdmin from '../DashboardAdmin';
 import TimeOffAdmin from '../TimeOffAdmin';
 import TimesheetAdmin from '../TimesheetAdmin';
 import Sidebar from '~/components/Sidebar';
+import TrashTimesheet from '../TrashTimesheet';
 
 const cx = classNames.bind(styles);
 
@@ -84,13 +85,13 @@ function Admin() {
             ],
         },
         {
-            type: 'Profile',
-            path: '',
+            type: 'Trash',
+            path: '/admin/trash',
             children: [
                 {
-                    itemContent: 'View Profile',
-                    icon: <FontAwesomeIcon icon={faIdBadge} />,
-                    path: '',
+                    itemContent: 'Timesheet deleted',
+                    icon: <FontAwesomeIcon icon={faTrash} />,
+                    path: '/admin/trash',
                 },
             ],
         },
@@ -126,6 +127,8 @@ function Admin() {
                     {params.type === 'timesheet' && <TimesheetAdmin />}
 
                     {params.type === 'timeoff' && <TimeOffAdmin />}
+
+                    {params.type === 'trash' && <TrashTimesheet />}
                 </div>
             </>
         </div>

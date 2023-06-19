@@ -12,6 +12,8 @@ import {
     faFire,
     faXmark,
     faFlag,
+    faPen,
+    faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react/headless';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
@@ -23,6 +25,7 @@ import format from 'date-fns/format';
 import { addDays } from 'date-fns';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
+import AvatarDefault from '~/components/AvatarDefault';
 
 const cx = classNames.bind(styles);
 
@@ -286,54 +289,70 @@ function TimeOffAdmin() {
                             </>
                         )}
                         <div className={cx('list-furlough')}>
-                            {/* 1 */}
-                            <div className={cx('item-sort')}>
-                                <span>Employee</span>
-                            </div>
-                            {/* 2 */}
-                            <div className={cx('item-sort')}>
-                                <FontAwesomeIcon icon={faClock} />
-                                <span>Created At</span>
-                            </div>
-                            {/* 3 */}
-                            <div className={cx('item-sort')}>
-                                <FontAwesomeIcon icon={faCalendar} />
-                                <span>Days off</span>
-                            </div>
-                            {/* 4 */}
-                            <div className={cx('item-sort')}>
-                                <FontAwesomeIcon icon={faFile} />
-                                <span>Note</span>
-                            </div>
-                            {/* 5 */}
-                            <div className={cx('item-sort')}>
-                                <FontAwesomeIcon icon={faFire} />
-                                <span>Status</span>
+                            <div className={cx('wrap-filter')}>
+                                <div className={cx('item-sort')}>
+                                    <span>Actions</span>
+                                </div>
+                                {/* 1 */}
+                                <div className={cx('item-sort')}>
+                                    <span>Employee</span>
+                                </div>
+                                {/* 2 */}
+                                <div className={cx('item-sort')}>
+                                    <FontAwesomeIcon icon={faClock} />
+                                    <span>Created At</span>
+                                </div>
+                                {/* 3 */}
+                                <div className={cx('item-sort')}>
+                                    <FontAwesomeIcon icon={faCalendar} />
+                                    <span>Days off</span>
+                                </div>
+                                {/* 4 */}
+                                <div className={cx('item-sort')}>
+                                    <FontAwesomeIcon icon={faFile} />
+                                    <span>Note</span>
+                                </div>
+                                {/* 5 */}
+                                <div className={cx('item-sort')}>
+                                    <FontAwesomeIcon icon={faFire} />
+                                    <span>Status</span>
+                                </div>
                             </div>
                             {furloughs.map((item) => (
-                                <>
-                                    {/* 1 */}
-                                    <div className={cx('item', 'group-avatar')} key={item.furloughId}>
-                                        <div>
+                                <div className={cx('wrap-item')} key={item.furloughId}>
+                                    <div className={cx('item')}>
+                                        <div className={cx('actions')}>
                                             <span
                                                 className={cx('edit')}
                                                 onClick={() => handleShowFormUpdateFurlough(item)}
                                             >
-                                                ✍️
+                                                <FontAwesomeIcon icon={faPen} />
                                             </span>
                                             <span
                                                 onClick={() => handleShowFormDeleteFurlough(item)}
                                                 className={cx('delete')}
                                             >
-                                                🔥
+                                                <FontAwesomeIcon icon={faTrash} />
                                             </span>
                                         </div>
-                                        <img
-                                            className={cx('avatar')}
-                                            src={item.employee.avatar}
-                                            alt="avatar"
-                                            onClick={() => handelOpenProfile(item.employee)}
-                                        />
+                                    </div>
+                                    {/* 1 */}
+                                    <div className={cx('item', 'group-avatar')}>
+                                        {item.employee.avatar ? (
+                                            <>
+                                                {' '}
+                                                <img
+                                                    className={cx('avatar')}
+                                                    src={item.employee.avatar}
+                                                    alt="avatar"
+                                                    onClick={() => handelOpenProfile(item.employee)}
+                                                />
+                                            </>
+                                        ) : (
+                                            <>
+                                                <AvatarDefault firstName={item.employee.firstName} color={'#3d81c2'} />
+                                            </>
+                                        )}
                                     </div>
 
                                     {/* 2 */}
@@ -393,7 +412,7 @@ function TimeOffAdmin() {
                                             Deny
                                         </span>
                                     </div>
-                                </>
+                                </div>
                             ))}
 
                             {modal && profile !== {} && typeHandleFurlough === 'openProfile' && (

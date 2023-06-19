@@ -13,7 +13,7 @@
 
 .timesheet-filter {
     display: grid;
-    grid-template-columns: 84px repeat(7, 1fr);
+    grid-template-columns: 84px 1fr 1fr 1fr 84px 120px 84px 1fr;
     align-items: center;
     justify-content: center;
     gap: 12px;

@@ -1,6 +1,35 @@
 .wrapper {
+    padding: 20px;
+}
+
+.header {
+    display: inline;
+    font-family: 'Saira Semi Condensed', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 500;
+    text-decoration: underline;
+    color: #3d81c2;
+    cursor: pointer;
+}
+
+.timesheet-filter {
     display: grid;
-    grid-template-columns: 84px 1fr 1fr 1fr 84px 120px 84px 1fr;
+    grid-template-columns: 64px 120px 130px 140px 150px 64px 100px 74px 1fr;
+
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #666;
+    padding-bottom: 8px;
+    margin-top: 12px;
+}
+.item-sort {
+    font-size: 1.3rem;
+}
+
+.item {
+    display: grid;
+    grid-template-columns: 64px 120px 130px 140px 150px 64px 100px 74px 1fr;
     align-items: center;
     justify-content: center;
     background-color: #fff;
@@ -8,10 +37,10 @@
     border-radius: 8px;
 }
 
-.wrapper + .wrapper {
+.item + .item {
     margin-top: 4px;
 }
-.wrapper {
+.item {
     padding: 12px 0;
 
     span {
@@ -83,30 +112,29 @@
 
 .wrap-actions {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
 }
 
 .actions {
     display: flex;
     align-items: center;
 
-    gap: 3px;
+    gap: 10px;
     margin-left: auto;
     padding-right: 16px;
 }
 
 .actions span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    // border: 1px solid #ddd;
-    background-color: #f7f6f9;
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
+    font-size: 1.2rem;
+    padding: 4px 6px;
+    background-color: #87d6b5;
+    border-radius: 18px;
     cursor: pointer;
 }
 
-.actions svg {
-    font-size: 1.3rem;
-    color: #a7a8ab;
+.actions span.delete {
+    background-color: #a92951;
+    color: #fff;
 }

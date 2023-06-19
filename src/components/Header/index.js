@@ -3,10 +3,11 @@ import styles from './Header.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
+import AvatarDefault from '../AvatarDefault';
 
 const cx = classNames.bind(styles);
 
-function Header({ avatar }) {
+function Header({ avatar, firstName }) {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('search')}>
@@ -24,7 +25,9 @@ function Header({ avatar }) {
                     </div>
                 </>
             ) : (
-                <></>
+                <>
+                    <AvatarDefault firstName={firstName} color={'#3d81c2'} />
+                </>
             )}
         </div>
     );

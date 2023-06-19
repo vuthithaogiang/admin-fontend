@@ -11,6 +11,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     text-align: center;
+    // align-items: center;
 }
 
 .list-furlough .item-sort {
@@ -43,9 +44,9 @@
 
 .list-furlough .item {
     padding: 12px;
-    border: 1.4px solid #b6cae8;
     font-size: 1.4rem;
     font-weight: 500;
+    border: 1px solid #ddd;
 }
 
 .list-furlough .item.days-off {
@@ -59,9 +60,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
+
     img {
         width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
     }
 }
 

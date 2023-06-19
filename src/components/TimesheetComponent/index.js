@@ -3,10 +3,12 @@ import styles from './TimesheetComponent.module.scss';
 import AvatarDefault from '../AvatarDefault';
 import Tippy from '@tippyjs/react/headless';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
-function TimesheetComponent({ item, onClick }) {
+function TimesheetComponent({ item, onClick, actions }) {
     const randomColor = () => {
         let hex = Math.floor(Math.random() * 0xffffff);
         let color = '#' + hex.toString(16);
@@ -14,7 +16,7 @@ function TimesheetComponent({ item, onClick }) {
         return color;
     };
     return (
-        <div className={cx('wrapper')} onClick={onClick}>
+        <div className={cx('wrapper')}>
             <Tippy
                 interactive
                 render={(attrs) => (
@@ -26,7 +28,7 @@ function TimesheetComponent({ item, onClick }) {
                 )}
                 placement="bottom-start"
             >
-                <div className={cx('thumbnail')}>
+                <div className={cx('thumbnail')} onClick={onClick}>
                     {(item.avatar === null) | (item.avatar === '') ? (
                         <AvatarDefault firstName={item.firstName} color={'#3d81c2'} />
                     ) : (
@@ -36,7 +38,8 @@ function TimesheetComponent({ item, onClick }) {
             </Tippy>
 
             <span className={cx('date')}>
-                <span className={cx('day-off-week')}>{item.dayOfWeek.substr(0, 3)}</span> {item.dateIn}
+                <span className={cx('day-off-week')}>{item.dayOfWeek.substr(0, 3)}</span> {item.dayOfMonth}{' '}
+                {item.monthInString}
             </span>
             {item.timeIn === null ? <span>_</span> : <span className={cx('time-in')}>🔥 {item.timeInString}</span>}
             {item.timeOut == null ? <span>_</span> : <span className={cx('time-out')}>🚀 {item.timeOutString}</span>}
@@ -47,7 +50,21 @@ function TimesheetComponent({ item, onClick }) {
             ) : (
                 <span className={cx('status-absent')}>Absent</span>
             )}
-            <span>{item.position}</span>
+            <span className={cx('wrap-actions')}>
+                {item.position}
+                {actions && (
+                    <span className={cx('actions')}>
+                        <span>
+                            {' '}
+                            <FontAwesomeIcon icon={faPen} />
+                        </span>
+                        <span>
+                            {' '}
+                            <FontAwesomeIcon icon={faTrash} />
+                        </span>
+                    </span>
+                )}
+            </span>
         </div>
     );
 }
