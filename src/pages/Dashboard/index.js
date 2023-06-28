@@ -137,7 +137,7 @@ function Dashboard() {
                                 <div className={cx('today')}>
                                     <div>
                                         <img src={images.math} alt="icon" />
-                                        <span>16 May, 2023</span>
+                                        <span>23 June, 2023</span>
                                     </div>
                                 </div>
                             </div>
@@ -177,7 +177,7 @@ function Dashboard() {
                                 <div className={cx('content')}>
                                     <span className={cx('title')}>Fisnished</span>
                                     <span className={cx('number')}>
-                                        {hoursTotal}
+                                        {hoursTotal} {'hours'}
                                         <strong>this week</strong>
                                     </span>
                                 </div>
@@ -239,7 +239,7 @@ function Dashboard() {
                                     </div>
                                     <div>
                                         <p>Follow Up</p>
-                                        <span>Follow Total of hourr working</span>
+                                        <span>Follow Total of hours working</span>
                                     </div>
                                 </div>
                             </div>

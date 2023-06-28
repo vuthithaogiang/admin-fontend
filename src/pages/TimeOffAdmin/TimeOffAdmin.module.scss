@@ -197,6 +197,10 @@ body.active-modal {
     align-items: center;
     gap: 18px;
     padding: 20px;
+
+    + .repeat {
+        border-top: 4px solid #000;
+    }
 }
 .repeat-content {
     display: flex;

@@ -87,7 +87,7 @@ function TimesheetAdmin() {
                 notifyError();
             } else {
                 notifySuccess();
-                // window.location.reload(false);
+                window.location.reload(false);
             }
         } catch (error) {
             notifyError();
@@ -111,12 +111,13 @@ function TimesheetAdmin() {
 
             try {
                 const response = await axios.put(`/timesheet/edit`, formData);
+                console.log(response.data);
 
-                if (response.data === 'undefined') {
+                if (typeof response.data === 'undefined') {
                     notifyError();
                 } else {
                     notifySuccess();
-                    // window.location.reload(true);
+                    window.location.reload(true);
                 }
             } catch (error) {
                 notifyError();
@@ -462,7 +463,7 @@ function TimesheetAdmin() {
                                                 <div className={cx('value')}>
                                                     <LocalizationProvider dateAdapter={AdapterDayjs} style={{}}>
                                                         <TimePicker
-                                                            label="Basic time picker"
+                                                            label="HH:mm aa"
                                                             value={timeInValue}
                                                             onChange={(value) => setTimeInValue(value)}
                                                         />
@@ -474,7 +475,7 @@ function TimesheetAdmin() {
                                                 <div className={cx('value')}>
                                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                         <TimePicker
-                                                            label="Basic time picker"
+                                                            label="HH:mm aa"
                                                             value={timeOutValue}
                                                             onChange={(value) => setTimeOutValue(value)}
                                                         />

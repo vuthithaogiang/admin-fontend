@@ -2,6 +2,8 @@ const images = {
     house: require('~/assets/images/house.svg').default,
     send: require('~/assets/images/send.svg').default,
     arrowRight: require('~/assets/images/arrowRight.svg').default,
+    arrowRight1: require('~/assets/images/arrowRight1.svg').default,
+    arrowLeft: require('~/assets/images/arrowLeft.svg').default,
     logo: require('~/assets/images/logo.svg').default,
     goal: require('~/assets/images/goal.svg').default,
     clock: require('~/assets/images/clock.svg').default,
